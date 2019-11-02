@@ -1,10 +1,8 @@
 package aStar;
 
 import java.io.*;
-import java.nio.file.Files;
 import java.util.Collections;
 import java.util.LinkedList;
-import java.util.List;
 import java.util.Scanner;
 
 public class MapV2 {
@@ -13,7 +11,6 @@ public class MapV2 {
     private Node[][] loadedNodes;
     private MapRegion loadedRegion = null;
     private InputStream reader;
-    private OutputStream writer;
 
     /**
      * creates a map of size_x by size_y and writes it to file. a sub-region is then loaded into memory designated by region.
@@ -22,93 +19,40 @@ public class MapV2 {
      * @param size_y of map to create
      * @param region map region to load into memory
      */
-    public MapV2(InputStream fileReader, OutputStream fileWriter, int size_x, int size_y, MapRegion region){
-        this.size_x = size_x; this.size_y = size_y;
-        //System.out.println("set class vars");
-        //System.out.println(map.isFile() + "");
-        if(map.isFile()) {
-            try {
-                //System.out.println("writing blank map");
-                PrintWriter writer = new PrintWriter(new BufferedWriter(new FileWriter(file)));
-                for (int r = 0; r < size_y; r++) {
-                    String toWrite = "";
-                    for (int c = 0; c < size_x; c++) {
-                        toWrite += Node.TraversalState.DEFAULT.serialize() + "\t"; //TSV
-                    }
-                    writer.println(toWrite);
-                    writer.flush();
-                }
-
-
-            } catch (IOException e) {
-                System.out.println("failed to serialize map to file");
-            }
-            //System.out.println("attempting to load " + region);
-            loadRegion(region);
-        }
+    public MapV2(InputStream fileReader, int size_x, int size_y, MapRegion region){
+        this.reader = fileReader;
+        this.size_x = size_x;
+        this.size_y = size_y;
     }
 
     /**
-     * loads a 10 by 10 array starting at 0,0
-     * @param file mapping file
-     * @param size_x of map to create
-     * @param size_y of map to create
+     * Function to load a map region into memory
+     * @param region
      */
-    public MapV2(File file, int size_x, int size_y){
-        this(file, size_x, size_y, new MapRegion(0,0,10,10));
-    }
-
     public void loadRegion (MapRegion region){
         if(region.x_off + region.x_size > size_x || region.y_off + region.y_size > size_y)
             throw new IndexOutOfBoundsException("Region exceeded map boundaries");
-        writeRegion(loadedRegion);
-        //System.out.println("called to load " + region);
-        try {
-            Scanner scanner = new Scanner(map);
-            loadedNodes = new Node[region.y_size][region.x_size];
-            //System.out.println("created array");
-            for(int r = 0; r < region.y_off + region.y_size; r++){
-                //System.out.println("row " + r);
-                if(r <  region.y_off){
-                    scanner.nextLine();
+
+        Scanner scanner = new Scanner(this.reader);
+        loadedNodes = new Node[region.y_size][region.x_size];
+        //System.out.println("created array");
+        for(int r = 0; r < region.y_off + region.y_size; r++){
+            //System.out.println("row " + r);
+            if(r <  region.y_off){
+                scanner.nextLine();
+                continue;
+            }
+            for(int c = 0; c < region.x_off + region.x_size; c++){
+                if(c < region.x_off){
+                    scanner.nextInt();
                     continue;
                 }
-                for(int c = 0; c < region.x_off + region.x_size; c++){
-                    if(c < region.x_off){
-                        scanner.nextInt();
-                        continue;
-                    }
-                    loadedNodes[r - region.y_off][c - region.x_off] = new Node(c,r,Node.getStateFromInt(scanner.nextInt()));
-                }
+                loadedNodes[r - region.y_off][c - region.x_off] = new Node(c,r,Node.getStateFromInt(scanner.nextInt()));
             }
-            loadedRegion = region;
-            //System.out.println("loaded " + region);
-        } catch (FileNotFoundException e) {
-            System.out.println("failed to de-serialize region");
         }
-
-    }
-
-    private void writeRegion(MapRegion region){
-        //System.out.println("writing " + loadedRegion);
-        if(region == null) return;
-        try {
-            List<String> lines = Files.readAllLines(map.toPath());
-            //System.out.println("Read file contents");
-            for(int r = region.y_off; r < region.y_off + region.y_size; r++){
-                String out = "";
-                for(int c = region.x_off; c < region.x_off + region.x_size; c++){
-                    out += loadedNodes[r - region.y_off][c - region.x_off].serialize() + "\t";
-                }
-                //System.out.println("re-writing line " + r);
-                out = ((region.x_off > 0) ? lines.get(r).substring(0, region.x_off * 2) : "") + out +
-                        ((lines.get(r).length() > (region.x_off + region.x_size) * 2)? lines.get(r).substring((region.x_off + region.x_size + 1) * 2) : "");
-                lines.set(r, out);
-            }
-        } catch (IOException e) {
-            System.out.println("failed to serialize region");
-        }
-        //System.out.println(region + " written");
+        scanner.close();
+        loadedRegion = region;
+        //System.out.println("loaded " + region);
     }
 
     /**
@@ -132,9 +76,7 @@ public class MapV2 {
     }
 
     public LinkedList<Node> adjacentTo(Node node){
-
         LinkedList<Node> toReturn = new LinkedList<>();
-
         //left
         if(node.getPos_x() - 1 > loadedRegion.x_off &&
                 loadedNodes[node.getPos_y() - loadedRegion.y_off][node.getPos_x() - 1 - loadedRegion.x_off].canTraverse() &&
@@ -142,7 +84,6 @@ public class MapV2 {
             loadedNodes[node.getPos_y() - loadedRegion.y_off][node.getPos_x() - 1 - loadedRegion.x_off].setCameFrom(node);
             toReturn.add(loadedNodes[node.getPos_y() - loadedRegion.y_off][node.getPos_x() - 1 - loadedRegion.x_off]);
         }
-
         //right
         if(node.getPos_x() + 1 < loadedRegion.x_off + loadedRegion.x_size &&
                 loadedNodes[node.getPos_y() - loadedRegion.y_off][node.getPos_x() + 1 - loadedRegion.x_off].canTraverse() &&
@@ -150,7 +91,6 @@ public class MapV2 {
             loadedNodes[node.getPos_y() - loadedRegion.y_off][node.getPos_x() + 1 - loadedRegion.x_off].setCameFrom(node);
             toReturn.add(loadedNodes[node.getPos_y() - loadedRegion.y_off][node.getPos_x() + 1 - loadedRegion.x_off]);
         }
-
         //above
         if(node.getPos_y() - 1 > loadedRegion.y_off &&
                 loadedNodes[node.getPos_y() - 1 - loadedRegion.y_off][node.getPos_x() - loadedRegion.x_off].canTraverse() &&
@@ -222,7 +162,7 @@ public class MapV2 {
             xsize = one.pos_x - xoff + buff;
         }
         xoff = (xoff < 0)? 0 : xoff;
-        //System.out.println("region x off: " + xoff + " x size " + xsize);
+
         if(one.pos_y < two.pos_y){
             yoff = one.pos_y - buff;
             ysize = two.pos_y - yoff + buff;
@@ -232,7 +172,6 @@ public class MapV2 {
             ysize = one.pos_y - yoff + buff;
         }
         yoff = (yoff < 0)? 0 : yoff;
-        //System.out.println("region y off: " + yoff + " y size " + ysize);
 
         return new MapRegion(xoff,yoff,xsize,ysize);
     }
@@ -241,15 +180,12 @@ public class MapV2 {
         LinkedList<Node> path = new LinkedList<>();
         path.addFirst(end); //start from the end and work backwards
         Node prev = end.getCameFrom(); // where did you come from where did you go?
-        //System.out.println(prev);
-        //System.out.println("reconstructing map");
         while(prev != null && prev != start){
             path.addFirst(prev);
             prev = prev.getCameFrom();
         }
         if(prev == null) return new LinkedList<>();  //short circuit to return empty list
         path.addFirst(start);
-        //System.out.println("map reconstructed");
         return path;
     }
 }
