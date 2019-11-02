@@ -42,26 +42,76 @@ public class MappingController{
 
     }
 
+    public void close(){
+        map.close();
+        metadata.clear();
+    }
+
+    /**
+     * function to generate a list of nodes to go from the start node to the end node
+     * @param start node to start at
+     * @param end node to end mapping at
+     * @return lis of nodes to get from start to end including start and end
+     */
+    public List<Node> getPathBetween(Node start, Node end){
+        return map.getPathBetween(start, end, 0);
+    }
+
+    /**function to get the name of the current map
+     * @returns the name of the map from the metadata file
+     */
+    public String getMapName(){
+        return getSafeMeta("name");
+    }
+
+    /**
+     * internal function to set up the metadata hashmap
+     * @param metaStream input stream of the metadata file
+     */
     private void getMetadata(InputStream metaStream){
         metadata = new HashMap<>();
         JsonReader reader = new JsonReader(new InputStreamReader(metaStream));
+        try {
+            reader.beginObject();
+            String currname = "", currval = "";
+            while(reader.hasNext()){
+                currname = reader.nextName();
+                currval = reader.nextString();
+                metadata.put(currname, currval);
+            }
 
-
+        } catch (IOException e) {
+            Log.e("login activity", "Can not read file: " + e.toString());
+        }
+        finally {
+            try {
+                reader.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
+    /**
+     * internal function to load the graph map into memory for use
+     * @param mapStream input stream of the map file
+     */
     private void loadmap(InputStream mapStream){
-        //find if the size parameters exist in the metadata map
-        if(! metadata.containsKey("size:x")) throw new RuntimeException("size:x not found in metadata");
-        if(! metadata.containsKey("size:y")) throw new RuntimeException("size:y not found in metadata");
-
         //pick up the size paramters and load the map
-        int size_x = Integer.parseInt(metadata.get("size:x"));
-        int size_y = Integer.parseInt(metadata.get("size:y"));
+        int size_x = Integer.parseInt(getSafeMeta("size:x"));
+        int size_y = Integer.parseInt(getSafeMeta("size:y"));
         map = new MapV2(mapStream, size_x, size_y, new MapRegion(0, 0, size_x, size_y));
     }
 
-    public List<Node> getPathBetween(Node start, Node end){
-        return map.getPathBetween(start, end, 0);
+    /**
+     * function to safely extract a map value from a given key
+     * @param key the given key
+     * @returns the requested value
+     * @throws RuntimeException if the specified key was not found in the metadata file
+     */
+    private String getSafeMeta(String key){
+        if(!metadata.containsKey(key)) throw new RuntimeException(key + " not found in metadata");
+        return metadata.get(key);
     }
 
 
