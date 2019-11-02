@@ -3,6 +3,7 @@ package com.example.pathy;
 import android.content.Context;
 import android.graphics.Canvas;
 import android.util.AttributeSet;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import androidx.appcompat.widget.AppCompatImageView;
@@ -35,6 +36,9 @@ public class MapPanning extends AppCompatImageView {
 
     @Override
     public boolean onTouchEvent(MotionEvent ev) {
+
+        Log.d("TOUCH PIC", "onTouchEvent fired. MapPlanning.java, Line 40");
+
         // Let the ScaleGestureDetector inspect all events.
         mScaleDetector.onTouchEvent(ev);
 
@@ -51,7 +55,7 @@ public class MapPanning extends AppCompatImageView {
                 }
                 break;
             }
-            case MotionEvent.ACTION_POINTER_1_DOWN: {
+            case MotionEvent.ACTION_POINTER_DOWN: {
                 if (mScaleDetector.isInProgress()) {
                     final float gx = mScaleDetector.getFocusX();
                     final float gy = mScaleDetector.getFocusY();
