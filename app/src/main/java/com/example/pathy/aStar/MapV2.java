@@ -14,7 +14,7 @@ public class MapV2 {
 
     /**
      * creates a map of size_x by size_y and writes it to file. a sub-region is then loaded into memory designated by region.
-     * @param file file reference to write to
+     * @param fileReader file reference to read and write from
      * @param size_x of map to create
      * @param size_y of map to create
      * @param region map region to load into memory
@@ -149,6 +149,7 @@ public class MapV2 {
             }
         }
     }
+
     private MapRegion getEncapRegion(Node one, Node two, int buff){
         //load region around the two nodess with a set buffer size (probably 10 by 10)
         int xoff, yoff, xsize, ysize;
