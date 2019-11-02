@@ -3,17 +3,13 @@ package com.example.pathy;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketAddress;
-import java.net.URL;
+import java.nio.ByteBuffer;
 
 public class Networking
 {
@@ -32,19 +28,34 @@ public class Networking
 
         try {
             outputStream = con.openFileOutput(filename, Context.MODE_PRIVATE);
+            byte[] lenBuf = new byte[Long.BYTES];
+            in.read(lenBuf);
+            long length = ByteUtils.bytesToLong(lenBuf);
             byte[] buffer = new byte[1024];
-            int read = 0;
-            while ((read = in.read(buffer)) >= 0) {
-                outputStream.write(buffer, 0, read);
+            long i = 0;
+            out:
+            while (true)
+            {
+                in.read(buffer);
+                for (byte b : buffer)
+                {
+                    outputStream.write(b);
+                    i++;
+                    if (i >= length) {
+                        break out;
+                    }
+                }
             }
             outputStream.close();
+            Log.d("MMFDebug", "Disconnecting.");
             out.write(3);
             out.flush();
-            Thread.sleep(100);
+            Thread.sleep(10);
             out.close();
             in.close();
             sock.close();
-            Log.d("MMFDebug", "Done.");
+            Log.d("MMFDebug", "Done, Wrote "+(i)+" bytes");
+            Log.d("MMFDebug", IO.readFromFile(con));
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -81,6 +92,20 @@ public class Networking
 
         @Override
         protected void onProgressUpdate(Void... values) {
+        }
+    }
+    private static class ByteUtils {
+        private static ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+
+        public static byte[] longToBytes(long x) {
+            buffer.putLong(0, x);
+            return buffer.array();
+        }
+
+        public static long bytesToLong(byte[] bytes) {
+            buffer.put(bytes, 0, bytes.length);
+            buffer.flip();//need flip
+            return buffer.getLong();
         }
     }
 }

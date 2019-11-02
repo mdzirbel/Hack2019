@@ -10,7 +10,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class IO {
-    private String readFromFile(Context context) {
+    static String readFromFile(Context context) {
 
         String ret = "";
 
