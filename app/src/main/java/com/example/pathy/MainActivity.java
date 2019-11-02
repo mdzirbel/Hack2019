@@ -3,12 +3,15 @@ package com.example.pathy;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.os.Bundle;
+import android.util.Log;
+import android.view.MotionEvent;
 import android.widget.SearchView;
 
 public class MainActivity extends AppCompatActivity {
 
     public SearchView userSearch;
     public SearchBar userSearchClass;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -21,4 +24,5 @@ public class MainActivity extends AppCompatActivity {
 
 
     }
+
 }
