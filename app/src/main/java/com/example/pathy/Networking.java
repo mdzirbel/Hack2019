@@ -13,21 +13,22 @@ import java.nio.ByteBuffer;
 
 public class Networking
 {
-    static void downloadFromServer(Context con) throws IOException
+    static void downloadFromServer(Context con, String file) throws IOException
     {
         Log.d("MMFDebug", "Starting Download...");
         Socket sock = new Socket("10.0.2.2", 8080);
         BufferedInputStream in = new BufferedInputStream(sock.getInputStream());
         BufferedOutputStream out = new BufferedOutputStream(sock.getOutputStream());
         out.write(1);
+        out.write(file.getBytes());
+        out.write(0);
         out.flush();
         Log.d("MMFDebug", "Connected");
 
-        String filename = "test.txt";
         FileOutputStream outputStream;
 
         try {
-            outputStream = con.openFileOutput(filename, Context.MODE_PRIVATE);
+            outputStream = con.openFileOutput(file, Context.MODE_PRIVATE);
             byte[] lenBuf = new byte[Long.BYTES];
             in.read(lenBuf);
             long length = ByteUtils.bytesToLong(lenBuf);
@@ -61,21 +62,24 @@ public class Networking
         }
 
     }
-    static void startDownloadTask(Context con)
+    static void startDownloadTask(Context con, String building)
     {
-        DownloadFileFromServerTask task = new DownloadFileFromServerTask(con);
+        DownloadFileFromServerTask task = new DownloadFileFromServerTask(con, building);
         task.execute("");
     }
     private static class DownloadFileFromServerTask extends AsyncTask<String, Void, String> {
         Context con;
-        public DownloadFileFromServerTask(Context con)
+        String building;
+        public DownloadFileFromServerTask(Context con, String building)
         {
             this.con = con;
+            this.building = building;
         }
         @Override
         protected String doInBackground(String... params) {
             try {
-                downloadFromServer(con);
+                downloadFromServer(con, building+".map");
+                downloadFromServer(con, building+".met");
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -98,11 +102,13 @@ public class Networking
         private static ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
 
         public static byte[] longToBytes(long x) {
+            buffer.clear();
             buffer.putLong(0, x);
             return buffer.array();
         }
 
         public static long bytesToLong(byte[] bytes) {
+            buffer.clear();
             buffer.put(bytes, 0, bytes.length);
             buffer.flip();//need flip
             return buffer.getLong();

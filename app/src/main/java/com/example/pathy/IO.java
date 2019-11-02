@@ -10,13 +10,12 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 
 public class IO {
-    static String readFromFile(Context context) {
+    static String readFromFile(Context context, String file) {
 
         String ret = "";
 
         try {
-            InputStream inputStream = context.openFileInput("test.txt");
-
+            InputStream inputStream = context.openFileInput(file);
             if ( inputStream != null ) {
                 InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
                 BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
