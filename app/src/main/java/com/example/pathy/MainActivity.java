@@ -1,18 +1,23 @@
 package com.example.pathy;
 
-import androidx.appcompat.app.AppCompatActivity;
-
 import android.os.Bundle;
+import android.widget.LinearLayout;
+import android.widget.SearchView;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.widget.SearchView;
 
 import java.io.File;
 
-public class MainActivity extends AppCompatActivity {
+import androidx.appcompat.app.AppCompatActivity;
 
+public class MainActivity extends AppCompatActivity  {
     public SearchView userSearch;
     public SearchBar userSearchClass;
+    public LinearLayout suggestion;
+
+
+
 
 
     @Override
@@ -21,10 +26,11 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
         Networking.startDownloadTask(getApplicationContext(), "union");
         userSearch = findViewById(R.id.search);
+        suggestion = findViewById(R.id.linearLayout);
         userSearch.setSubmitButtonEnabled(true);
-        userSearchClass.registerSearchListeners(userSearch, getApplicationContext());
-
-
+        userSearch.setQueryHint("Type a room...");
+        userSearch.setIconifiedByDefault(false);
+        userSearchClass.registerSearchListeners(userSearch, suggestion, getApplicationContext());
     }
 
 }

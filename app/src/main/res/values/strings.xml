@@ -1,3 +1,19 @@
 <resources>
     <string name="app_name">Pathy</string>
+
+    <string-array name="query_suggestions">
+        <item>Archie M. Griffin Grand Ballroom</item>
+        <item>Senate Chambers</item>
+        <item>Student-Alumni Council Room</item>
+        <item>Sphinx Centennial Leadership Suite</item>
+        <item>Glass Art Lounge</item>
+        <item>Keith B. Key Center for Student Leadership and Service</item>
+        <item>Administrative Office Suite</item>
+        <item>Danny Price Student Lounge</item>
+        <item>Restroom</item>
+        <item>Stairs Down</item>
+        <item>Stairs Up</item>
+        <item>Elevator</item>
+
+    </string-array>
 </resources>
