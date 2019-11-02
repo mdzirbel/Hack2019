@@ -21,7 +21,7 @@
         android:actionViewClass="android.widget.SearchView"
         android:focusable="true" />
 
-    <androidx.appcompat.widget.AppCompatImageView
+    <com.example.pathy.MapPanning
         android:id="@+id/im_move_zoom_rotate"
         android:layout_width="wrap_content"
         android:layout_height="578dp"
@@ -50,5 +50,15 @@
             android:layout_height="wrap_content"
             android:orientation="vertical" />
     </ScrollView>
+        android:layout_height="wrap_content"
+        android:layout_marginTop="27dp"
+        android:layout_marginEnd="61dp"
+        android:layout_marginBottom="62dp"
+        android:src="@drawable/union_floor_2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search"
+         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
