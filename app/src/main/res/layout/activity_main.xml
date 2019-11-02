@@ -6,6 +6,8 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+
+
     <SearchView
         android:id="@+id/search"
         android:layout_width="409dp"
