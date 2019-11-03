@@ -73,7 +73,7 @@ public class MappingController{
         if(!hasInit) throw new RuntimeException("Attempted to close a non-initialized map");
         List<List<Node>> solutions = new LinkedList<>();
         for(Node end : ends) {
-            List<Node> solution = map.getPathBetween(start, end, 0);
+            List<Node> solution = map.getPathBetween(start, end);
             if(solution.size() > 0) solutions.add(solution);
         }
 
