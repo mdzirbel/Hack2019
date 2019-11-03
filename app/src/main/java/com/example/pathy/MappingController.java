@@ -100,16 +100,19 @@ public class MappingController{
      * @returns the name of the map from the metadata file
      */
     public static String getMapName(){
-        if(!hasInit) throw new RuntimeException("Attempted to close a non-initialized map");
+        if(!hasInit) throw new RuntimeException("Attempted to get map name before data was loaded");
         return getSafeMeta("name");
     }
 
     public static List<Node> getRoomNodes(String roomName){
+        if(!hasInit) throw new RuntimeException("Attempted to get room nodes before data was loaded");
         if(!roomToEntryNodes.containsKey(roomName)) throw new RuntimeException(roomName + " not found in metadata");
         return roomToEntryNodes.get(roomName);
     }
 
     public static List<String> getRoomNames(){
+        if(!hasInit) throw new RuntimeException("Attempted to get room names before data was loaded");
+        if(!hasInit) throw new RuntimeException("Attempted to close a non-initialized map");
         return new LinkedList<>(roomToEntryNodes.keySet());
     }
 
