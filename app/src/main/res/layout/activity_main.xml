@@ -14,15 +14,32 @@
         tools:layout_editor_absoluteX="0dp"
         tools:layout_editor_absoluteY="137dp" />
 
-    <ScrollView
-        android:id="@+id/suggestion"
+    <SearchView
+        android:id="@+id/search"
         android:layout_width="0dp"
-        android:layout_height="100dp"
-        android:layout_marginStart="32dp"
-        android:layout_marginEnd="32dp"
-        android:background="#00FFFFFF"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="80dp"
+        android:actionViewClass="android.widget.SearchView"
+        android:background="#FFFFFF"
+        android:focusable="true"
+        android:showAsAction="collapseActionView|ifRoom"
+        app:layout_constraintBottom_toTopOf="@+id/im_move_zoom_rotate"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.666" >
+
+    </SearchView>
+
+    <ScrollView
+        android:id="@+id/suggestion"
+        android:layout_width="413dp"
+        android:layout_height="97dp"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:background="#00FFFFFF"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search">
 
@@ -33,24 +50,7 @@
             android:background="#FFFFFF"
 
             android:orientation="vertical" />
-        //android:padding="5dp" />
     </ScrollView>
-
-    <SearchView
-        android:id="@+id/search"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
-        android:actionViewClass="android.widget.SearchView"
-        android:background="#00FFFFFF"
-        android:focusable="true"
-        android:showAsAction="collapseActionView|ifRoom"
-        app:layout_constraintBottom_toTopOf="@+id/im_move_zoom_rotate"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.666" />
 
     <!--    <![CDATA[-->
 

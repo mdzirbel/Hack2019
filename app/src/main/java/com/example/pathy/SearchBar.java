@@ -9,8 +9,9 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
+
+import com.example.pathy.aStar.Node;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -19,30 +20,31 @@ import java.util.List;
 
 public class SearchBar {
 
-    public SearchBar(Context context) {
+    static SearchView search;
 
+    public SearchBar(SearchView searchView) {
+        search = searchView;
     }
 
-
-    public static String userInput;
-//    public static final String[] SUGGESTLIST = {"Archie M. Griffin Grand Ballroom",
+//    private static final String[] SUGGESTLIST = {"Archie M. Griffin Grand Ballroom",
 //            "Senate Chambers", "Student-Alumni Council Room", "Sphinx Centennial Leadership Suite",
 //            "Ohio Staters, Inc. Founders Room", "Ohio Staters, Inc. Traditions Room",
 //            "Glass Art Lounge", "Keith B. Key Center for Student Leadership and Service",
 //            "Administrative Office Suite", "Danny Price Student Lounge"};
-    private SimpleCursorAdapter adapter;
+
 
     public static void registerSearchListeners(final SearchView userSearch, final LinearLayout suggestion, final Context con) {
         userSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                userInput = query;
-                Log.e("Submit!", "Input: " + query);
+                Log.d("QUERY SUBMIT", "Input: " + query);
+                //submitQuery(query);
                 return false;
             }
 
             @Override
             public boolean onQueryTextChange(String newText) {
+
                 Toast.makeText(con, "Input: " + newText, Toast.LENGTH_LONG).show();
                 Log.e("Text change", "Input: " + newText);
 
@@ -51,11 +53,10 @@ public class SearchBar {
                 return false;
             }
         });
-
-
     }
 
-    public static void dropDownList(String text, final LinearLayout suggestion, Context context, final SearchView userSearch) {
+
+    public void dropDownList(String text, final LinearLayout suggestion, Context context, final SearchView userSearch) {
         List<String> rooms = new ArrayList<String>();
         rooms = MappingController.getRoomNames();
         Collections.sort(rooms);
@@ -63,21 +64,13 @@ public class SearchBar {
         int length = text.length();
         suggestion.getLayoutParams().height = 0;
 
-        userSearch.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                suggestion.removeAllViews();
-                userSearch.clearFocus();
-                return false;
-            }
-        });
-
 
         if (text.length() == 0) {
             suggestion.getLayoutParams().height = 0;
             suggestion.removeAllViews();
         } else {
             suggestion.getLayoutParams().height = 600;
+
             for (int i = 0; i < rooms.size(); i++) {
                 if (text.compareToIgnoreCase(rooms.get(i).substring(0, length)) == 0) {
                     Button button = new Button(context);
@@ -85,6 +78,8 @@ public class SearchBar {
                     button.setBackgroundResource(R.drawable.border);
                     button.setBackgroundColor(Color.TRANSPARENT);
                     suggestion.addView(button);
+                    button.setOnClickListener(onSuggestionClickListener);
+
                 }
             }
         }
@@ -92,4 +87,28 @@ public class SearchBar {
 
     }
 
+//    // For clicking the suggestions
+    static private View.OnClickListener onSuggestionClickListener = new View.OnClickListener() {
+        @Override
+        public void onClick(View v) {
+
+            // Get the text of the button you selected
+            String buttonText = (String) ((Button) v).getText();
+
+            // Fill in the whole text in the search box and send the query
+            search.setQuery(buttonText, true);
+        }
+    };
+
+    private void submitQuery(String query) {
+
+        Log.d("SUMBIT QUERY", query);
+
+        Node startNode = MainActivity.location.currentNode;
+
+        MappingController.getPathBetween(startnode, query);
+
+    }
+
+//getRoomNodes(name)
 }
