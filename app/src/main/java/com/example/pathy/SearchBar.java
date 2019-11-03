@@ -19,7 +19,7 @@ import java.util.List;
 public class SearchBar {
 
     private static SearchView search;
-
+    static String currentRouteQuery = null;
     public SearchBar(SearchView searchView) {
         search = searchView;
     }
@@ -110,6 +110,7 @@ public class SearchBar {
         else {
             Log.d("SUBMIT QUERY", "Current node " + MainActivity.location.currentNode);
             Log.d("SUBMIT QUERY", "nearest valid " + MappingController.snapNearestNode(MainActivity.location.currentNode));
+            currentRouteQuery = query;
             MapPanning.drawPoints = MappingController.getPathBetween(MappingController.snapNearestNode(MainActivity.location.currentNode), query);
             if(MapPanning.drawPoints.isEmpty()) Toast.makeText(context, "Path not found!", Toast.LENGTH_LONG).show();
         }
