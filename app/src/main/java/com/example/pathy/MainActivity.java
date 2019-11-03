@@ -27,7 +27,7 @@ public class MainActivity extends AppCompatActivity  {
         Networking.startDownloadTask(getApplicationContext(), "union");
         userSearch = findViewById(R.id.search);
         suggestion = findViewById(R.id.linearLayout);
-        userSearch.setSubmitButtonEnabled(true);
+        userSearch.setSubmitButtonEnabled(false);
         userSearch.setQueryHint("Type a room...");
         userSearch.setIconifiedByDefault(false);
         userSearchClass.registerSearchListeners(userSearch, suggestion, getApplicationContext());

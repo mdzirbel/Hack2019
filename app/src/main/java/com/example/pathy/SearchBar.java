@@ -54,12 +54,20 @@ public class SearchBar {
 
     }
 
-    public static void dropDownList(String text, LinearLayout suggestion, Context context, SearchView userSearch) {
+    public static void dropDownList(String text, final LinearLayout suggestion, Context context, final SearchView userSearch) {
         Arrays.sort(SUGGESTLIST);
         suggestion.removeAllViews();
         int length = text.length();
-        List<String> suggested = new ArrayList<String>();
         suggestion.getLayoutParams().height = 0;
+
+        userSearch.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                suggestion.removeAllViews();
+                userSearch.clearFocus();
+                return false;
+            }
+        });
 
 
         if (text.length() == 0) {
@@ -77,7 +85,6 @@ public class SearchBar {
                 }
             }
         }
-        java.util.Collections.sort(suggested);
 
 
     }
