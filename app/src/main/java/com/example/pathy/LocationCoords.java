@@ -34,6 +34,7 @@ public class LocationCoords implements LocationListener {
 
         if (MappingController.isHasInit()) {
             currentNode = MappingController.coordToNode(lon, lat);
+            MapPanning.currentNode = currentNode;
         }
 
         Log.d("LOCATION", "Lon: " + lon + ", Lat: " + lat);
