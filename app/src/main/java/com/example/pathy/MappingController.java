@@ -12,9 +12,9 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
-import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.HashMap;
-import java.util.HashSet;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
@@ -60,12 +60,39 @@ public class MappingController{
     /**
      * function to generate a list of nodes to go from the start node to the end node
      * @param start node to start at
-     * @param end node to end mapping at
-     * @return lis of nodes to get from start to end including start and end
+     * @param ends nodes to end mapping at
+     * @return shortest list of nodes to get from start to end including start and end node
+     * if the path cannot be made the list will be empty
      */
-    public static List<Node> getPathBetween(Node start, Node end){
+    public static List<Node> getPathBetween(Node start, List<Node> ends){
         if(!hasInit) throw new RuntimeException("Attempted to close a non-initialized map");
-        return map.getPathBetween(start, end, 0);
+        List<List<Node>> solutions = new LinkedList<>();
+        for(Node end : ends) {
+            List<Node> solution = map.getPathBetween(start, end, 0);
+            if(solution.size() > 0) solutions.add(solution);
+        }
+
+        //sort collections based on size
+        //largest first
+        Collections.sort(solutions, new Comparator<List<Node>>() {
+            @Override
+            public int compare(List<Node> o1, List<Node> o2) {
+                return o1.size() - o2.size();
+            }
+        });
+
+        return solutions.get(0);
+    }
+
+    /**
+     * function to generate a list of nodes to go from a start node to the nearest room end node
+     * @param start node to start path from
+     * @param roomName desired room name to path to
+     * @returns a list of nodes that traverse from start to the nearest room end node
+     * if the path cannot be made the list will be empty
+     */
+    public static List<Node> getPathBetween(Node start, String roomName){
+        return getPathBetween(start, getRoomNodes(roomName));
     }
 
     /**
