@@ -56,7 +56,7 @@ public class SearchBar {
     }
 
 
-    public static void dropDownList(String text, final LinearLayout suggestion, Context context, final SearchView userSearch) {
+    public void dropDownList(String text, final LinearLayout suggestion, Context context, final SearchView userSearch) {
         List<String> rooms = new ArrayList<String>();
         rooms = MappingController.getRoomNames();
         Collections.sort(rooms);

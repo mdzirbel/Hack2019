@@ -137,7 +137,7 @@ public class MapPanning extends AppCompatImageView {
 
         return true;
     }
-    LinkedList<Node> drawPoints = new LinkedList<>();
+    static LinkedList<Node> drawPoints = new LinkedList<>();
     @Override
     public void onDraw(Canvas canvas) {
 
@@ -163,7 +163,7 @@ public class MapPanning extends AppCompatImageView {
             int nodeY = drawPoints.get(i).getPos_y();
             int normalizeX = (int)((nodeX+0.0)/125*getWidth());
             int normalizeY = (int)((nodeY+0.0)/115*realHeight+imgOff);
-            canvas.drawCircle(normalizeX, normalizeY, 10, paint);
+//            canvas.drawCircle(normalizeX, normalizeY, 10, paint);
         }
         for(int i = 0; i < drawPoints.size()-1; i++) {
             int nodeX1 = drawPoints.get(i).getPos_x();
