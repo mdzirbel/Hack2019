@@ -32,7 +32,9 @@ public class LocationCoords implements LocationListener {
         // Current lon and lat
         double lat = location.getLongitude(); // [sic]
 
-        currentNode = MappingController.coordToNode(lon, lat);
+        if (MappingController.hasInit) {
+            currentNode = MappingController.coordToNode(lon, lat);
+        }
 
         Log.d("LOCATION", "Lon: " + lon + ", Lat: " + lat);
 
