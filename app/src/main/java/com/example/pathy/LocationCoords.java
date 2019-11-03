@@ -36,6 +36,9 @@ public class LocationCoords implements LocationListener {
             currentNode = MappingController.coordToNode(lon, lat);
             MapPanning.currentNode = currentNode;
             mp.postInvalidate();
+            if(SearchBar.currentRouteQuery!=null) {
+                MapPanning.drawPoints = MappingController.getPathBetween(MappingController.snapNearestNode(MainActivity.location.currentNode), SearchBar.currentRouteQuery);
+            }
         }
 
         Log.d("LOCATION", "Lon: " + lon + ", Lat: " + lat);
