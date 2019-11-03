@@ -28,8 +28,8 @@ public class LocationCoords implements LocationListener {
     @Override
     public void onLocationChanged(android.location.Location location) {
 
-        double lon = location.getLatitude();  // [sic]
         // Current lon and lat
+        double lon = location.getLatitude();  // [sic]
         double lat = location.getLongitude(); // [sic]
 
         if (MappingController.isHasInit()) {
