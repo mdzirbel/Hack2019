@@ -10,6 +10,8 @@ import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import androidx.appcompat.widget.AppCompatImageView;
 
+import com.example.pathy.aStar.Node;
+
 import java.util.LinkedList;
 
 public class MapPanning extends AppCompatImageView {
@@ -135,7 +137,7 @@ public class MapPanning extends AppCompatImageView {
 
         return true;
     }
-    LinkedList<int[]> drawPoints = new LinkedList<>();
+    LinkedList<Node> drawPoints = new LinkedList<>();
     @Override
     public void onDraw(Canvas canvas) {
 
@@ -153,13 +155,26 @@ public class MapPanning extends AppCompatImageView {
         Paint paint = new Paint();
         paint.setColor(Color.BLACK);
         paint.setStyle(Paint.Style.FILL);
-        drawPoints.add(new int[]{0,0});
-        drawPoints.add(new int[]{125,115});
-        drawPoints.add(new int[]{125,0});
-        drawPoints.add(new int[]{0,115});
-        int realHeight = getHeight()-275*2;
+        paint.setStrokeWidth(5);
+        int imgOff = 235;
+        int realHeight = getHeight()-imgOff*2;
         for(int i = 0; i < drawPoints.size(); i++) {
-            canvas.drawCircle((int)((drawPoints.get(i)[0]+0.0)/125*getWidth()), (int)((drawPoints.get(i)[1]+0.0)/115*realHeight+275), 10, paint);
+            int nodeX = drawPoints.get(i).getPos_x();
+            int nodeY = drawPoints.get(i).getPos_y();
+            int normalizeX = (int)((nodeX+0.0)/125*getWidth());
+            int normalizeY = (int)((nodeY+0.0)/115*realHeight+imgOff);
+            canvas.drawCircle(normalizeX, normalizeY, 10, paint);
+        }
+        for(int i = 0; i < drawPoints.size()-1; i++) {
+            int nodeX1 = drawPoints.get(i).getPos_x();
+            int nodeY1 = drawPoints.get(i).getPos_y();
+            int nodeX2 = drawPoints.get(i+1).getPos_x();
+            int nodeY2 = drawPoints.get(i+1).getPos_y();
+            int normalizeX1 = (int)((nodeX1+0.0)/125*getWidth());
+            int normalizeY1 = (int)((nodeY1+0.0)/115*realHeight+imgOff);
+            int normalizeX2 = (int)((nodeX2+0.0)/125*getWidth());
+            int normalizeY2 = (int)((nodeY2+0.0)/115*realHeight+imgOff);
+            canvas.drawLine(normalizeX1, normalizeY1, normalizeX2, normalizeY2, paint);
         }
         canvas.restore();
     }
