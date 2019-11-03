@@ -102,9 +102,7 @@ public class SearchBar {
 
         Log.d("SUMBIT QUERY", query);
 
-        Node startNode = MainActivity.location.currentNode;
-
-        MapPanning.drawPoints = (LinkedList) MappingController.getPathBetween(startNode, query);
+        MapPanning.drawPoints = (LinkedList) MappingController.getPathBetween(MainActivity.location.currentNode, query);
 
     }
 
