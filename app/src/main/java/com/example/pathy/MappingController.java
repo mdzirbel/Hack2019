@@ -38,7 +38,7 @@ public class MappingController{
             }
         }
         catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
+            Log.e("Map loading", "File not found: " + e.toString());
         }
 
     }
@@ -61,7 +61,13 @@ public class MappingController{
         return map.getPathBetween(start, end, 0);
     }
 
-    public Node coordToXY(double lon, double lat) {
+    /**
+     * function to get a node relative to the building latitude and longitude
+     * @param lon
+     * @param lat
+     * @return
+     */
+    public Node coordToNode(double lon, double lat) {
         double y = lon;
         double x = lat;
 
@@ -108,7 +114,7 @@ public class MappingController{
             }
 
         } catch (IOException e) {
-            Log.e("login activity", "Can not read file: " + e.toString());
+            Log.e("Map loading", "Can not read file: " + e.toString());
         }
         finally {
             try {
