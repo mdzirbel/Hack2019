@@ -86,7 +86,9 @@ public class MappingController{
             }
         });
 
-        return map.optimizePath(solutions.get(0));
+        if(solutions.size() > 0)
+            return map.optimizePath(solutions.get(0));
+        return new LinkedList<>();
     }
 
     /**
@@ -128,7 +130,7 @@ public class MappingController{
         x = Math.max(0, Math.min(x, 124));
         y = Math.max(0, Math.min(y, 114));
 
-        return new Node((int) Math.round(x), (int) Math.round(y));
+        return snapNearestNode(getNode((int) Math.round(x), (int) Math.round(y)));
     }
 
     /**function to get the name of the current map
@@ -153,6 +155,10 @@ public class MappingController{
 
     public static Node getNode(int x, int y){
         return map.getNode(x,y);
+    }
+
+    public static Node snapNearestNode(Node current){
+        return map.snapNearest(current);
     }
 
     /**

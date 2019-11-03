@@ -14,10 +14,10 @@ import com.example.pathy.aStar.Node;
 
 public class LocationCoords implements LocationListener {
 
-    Node currentNode; // The node you're currently at
-
+    Node currentNode = new Node(40, 51); // The node you're currently at
+    MapPanning mp;
     public LocationCoords(Context context, MainActivity that) {
-
+        this.mp = that.findViewById(R.id.im_move_zoom_rotate);
         if (ContextCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context, android.Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
             ActivityCompat.requestPermissions(that, new String[]{android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.ACCESS_COARSE_LOCATION}, 101);
         }
@@ -28,12 +28,14 @@ public class LocationCoords implements LocationListener {
     @Override
     public void onLocationChanged(android.location.Location location) {
 
-        double lon = location.getLatitude();  // [sic]
         // Current lon and lat
+        double lon = location.getLatitude();  // [sic]
         double lat = location.getLongitude(); // [sic]
 
         if (MappingController.isHasInit()) {
             currentNode = MappingController.coordToNode(lon, lat);
+            MapPanning.currentNode = currentNode;
+            mp.postInvalidate();
         }
 
         Log.d("LOCATION", "Lon: " + lon + ", Lat: " + lat);

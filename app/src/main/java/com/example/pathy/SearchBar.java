@@ -93,7 +93,7 @@ public class SearchBar {
             String buttonText = (String) ((Button) v).getText();
 
             // Fill in the whole text in the search box and send the query
-//            search.setQuery(buttonText, false);
+            search.setQuery(buttonText, false);
             submitQuery(buttonText);
         }
     };
@@ -107,7 +107,9 @@ public class SearchBar {
             Log.e("SUBMIT QUERY", "Passed null pointer");
         }
         else {
-            MapPanning.drawPoints = (LinkedList) MappingController.getPathBetween(MainActivity.location.currentNode, query);
+            Log.d("SUBMIT QUERY", "Current node " + MainActivity.location.currentNode);
+            Log.d("SUBMIT QUERY", "nearest valid " + MappingController.snapNearestNode(MainActivity.location.currentNode));
+            MapPanning.drawPoints = MappingController.getPathBetween(MappingController.snapNearestNode(MainActivity.location.currentNode), query);
         }
     }
 
