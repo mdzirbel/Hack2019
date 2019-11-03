@@ -58,6 +58,10 @@ public class MappingController{
         hasInit = false;
     }
 
+    public static boolean isHasInit() {
+        return hasInit;
+    }
+
     /**
      * function to generate a list of nodes to go from the start node to the end node
      * @param start node to start at
