@@ -11,10 +11,8 @@ import java.io.IOException;
 import java.net.Socket;
 import java.nio.ByteBuffer;
 
-public class Networking
-{
-    static void downloadFromServer(Context con, String file) throws IOException
-    {
+public class Networking {
+    static void downloadFromServer(Context context, String file) throws IOException {
         Log.d("MMFDebug", "Starting Download...");
         Socket sock = new Socket("10.0.2.2", 8080);
         BufferedInputStream in = new BufferedInputStream(sock.getInputStream());
@@ -28,18 +26,16 @@ public class Networking
         FileOutputStream outputStream;
 
         try {
-            outputStream = con.openFileOutput(file, Context.MODE_PRIVATE);
+            outputStream = context.openFileOutput(file, Context.MODE_PRIVATE);
             byte[] lenBuf = new byte[Long.BYTES];
             in.read(lenBuf);
             long length = ByteUtils.bytesToLong(lenBuf);
             byte[] buffer = new byte[1024];
             long i = 0;
             out:
-            while (true)
-            {
+            while (true) {
                 in.read(buffer);
-                for (byte b : buffer)
-                {
+                for (byte b : buffer) {
                     outputStream.write(b);
                     i++;
                     if (i >= length) {
@@ -55,30 +51,33 @@ public class Networking
             out.close();
             in.close();
             sock.close();
-            Log.d("MMFDebug", "Done, Wrote "+(i)+" bytes");
+            Log.d("MMFDebug", "Done, Wrote " + (i) + " bytes");
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
-    static void startDownloadTask(Context con, String building)
-    {
-        DownloadFileFromServerTask task = new DownloadFileFromServerTask(con, building);
+
+    static void startDownloadTask(Context context, String building) {
+        DownloadFileFromServerTask task = new DownloadFileFromServerTask(context, building);
         task.execute("");
     }
+
     private static class DownloadFileFromServerTask extends AsyncTask<String, Void, String> {
-        Context con;
+        Context context;
         String building;
-        public DownloadFileFromServerTask(Context con, String building)
-        {
-            this.con = con;
+
+        public DownloadFileFromServerTask(Context context, String building) {
+            this.context = context;
             this.building = building;
         }
+
         @Override
         protected String doInBackground(String... params) {
             try {
-                downloadFromServer(con, building+".map");
-                downloadFromServer(con, building+".met");
+                downloadFromServer(context, building + ".map");
+                downloadFromServer(context, building + ".met");
+                MappingController.allocateMap(context);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -97,6 +96,7 @@ public class Networking
         protected void onProgressUpdate(Void... values) {
         }
     }
+
     private static class ByteUtils {
         private static ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
 
