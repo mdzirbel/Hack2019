@@ -23,8 +23,8 @@ public class MainActivity extends AppCompatActivity {
         userSearch = findViewById(R.id.search);
         userSearch.setSubmitButtonEnabled(true);
         userSearchClass.registerSearchListeners(userSearch, getApplicationContext());
-
-
+        MapPanning mp = findViewById(R.id.im_move_zoom_rotate);
+        mp.setImageDrawable(DrawOnImage.drawOnImage(getApplicationContext()));
     }
 
 }
