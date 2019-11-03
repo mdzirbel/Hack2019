@@ -1,21 +1,17 @@
 package com.example.pathy;
 
 
-import android.app.ListActivity;
 import android.content.Context;
+import android.graphics.Color;
 import android.util.Log;
 import android.widget.Button;
 import android.widget.LinearLayout;
-import android.widget.ScrollView;
 import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
-import android.widget.TextView;
 import android.widget.Toast;
-import android.content.SearchRecentSuggestionsProvider;
-
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 public class SearchBar {
@@ -55,6 +51,7 @@ public class SearchBar {
     }
 
     public static void dropDownList(String text, LinearLayout suggestion, Context context) {
+        Arrays.sort(SUGGESTLIST);
         suggestion.removeAllViews();
         int length = text.length();
         List<String> suggested = new ArrayList<String>();
@@ -62,9 +59,12 @@ public class SearchBar {
             if (text.compareToIgnoreCase(SUGGESTLIST[i].substring(0, length)) == 0) {
                 Button button = new Button(context);
                 button.setText(SUGGESTLIST[i]);
+                button.setBackgroundResource(R.drawable.border);
+                button.setBackgroundColor(Color.TRANSPARENT);
                 suggestion.addView(button);
             }
         }
+        java.util.Collections.sort(suggested);
 
 
     }

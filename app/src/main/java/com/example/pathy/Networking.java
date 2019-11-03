@@ -56,7 +56,6 @@ public class Networking
             in.close();
             sock.close();
             Log.d("MMFDebug", "Done, Wrote "+(i)+" bytes");
-            Log.d("MMFDebug", IO.readFromFile(con));
         } catch (Exception e) {
             e.printStackTrace();
         }
