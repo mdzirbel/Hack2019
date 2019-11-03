@@ -19,7 +19,7 @@ import java.util.List;
 public class SearchBar {
 
     private static SearchView search;
-
+    static String currentRouteQuery = null;
     public SearchBar(SearchView searchView) {
         search = searchView;
     }
@@ -36,7 +36,9 @@ public class SearchBar {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.d("QUERY SUBMIT", "Input: " + query);
-                submitQuery(query);
+                suggestion.getLayoutParams().height = 0;
+                suggestion.removeAllViews();
+                submitQuery(query, con);
                 return false;
             }
 
@@ -69,7 +71,7 @@ public class SearchBar {
             suggestion.getLayoutParams().height = 600;
 
             for (int i = 0; i < rooms.size(); i++) {
-                if (text.compareToIgnoreCase(rooms.get(i).substring(0, length)) == 0) {
+                if (text.compareToIgnoreCase(rooms.get(i).substring(0, Math.min(length, rooms.get(i).length()))) == 0) {
                     Button button = new Button(context);
                     button.setText(rooms.get(i));
                     button.setBackgroundResource(R.drawable.border);
@@ -93,12 +95,11 @@ public class SearchBar {
             String buttonText = (String) ((Button) v).getText();
 
             // Fill in the whole text in the search box and send the query
-            search.setQuery(buttonText, false);
-            submitQuery(buttonText);
+            search.setQuery(buttonText, true);
         }
     };
 
-    private static void submitQuery(String query) {
+    private static void submitQuery(String query, Context context) {
 
         Log.d("SUBMIT QUERY", query);
         Log.d("SUBMIT QUERY", ""+MainActivity.location.currentNode);
@@ -109,7 +110,9 @@ public class SearchBar {
         else {
             Log.d("SUBMIT QUERY", "Current node " + MainActivity.location.currentNode);
             Log.d("SUBMIT QUERY", "nearest valid " + MappingController.snapNearestNode(MainActivity.location.currentNode));
+            currentRouteQuery = query;
             MapPanning.drawPoints = MappingController.getPathBetween(MappingController.snapNearestNode(MainActivity.location.currentNode), query);
+            if(MapPanning.drawPoints.isEmpty()) Toast.makeText(context, "Path not found!", Toast.LENGTH_LONG).show();
         }
     }
 

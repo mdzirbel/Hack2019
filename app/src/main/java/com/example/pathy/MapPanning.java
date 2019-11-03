@@ -159,18 +159,18 @@ public class MapPanning extends AppCompatImageView {
         Paint paint = new Paint();
         paint.setColor(Color.BLACK);
         paint.setStyle(Paint.Style.FILL);
-        paint.setStrokeWidth(5);
+        paint.setStrokeWidth(6);
         int imgOff = 235;
         int realHeight = getHeight()-imgOff*2;
         Log.d("MMFDebug", drawPoints.size()+" size");
-//        for(int i = 0; i < drawPoints.size(); i++) {
-//            int nodeX = drawPoints.get(i).getPos_x();
-//            int nodeY = drawPoints.get(i).getPos_y();
-//            int normalizeX = (int)((nodeX+0.0)/125*getWidth());
-//            int normalizeY = (int)((nodeY+0.0)/115*realHeight+imgOff);
-//            paint.setColor(Color.argb(drawPoints.get(i).canTraverse() ? 127 : 0, 0, 255, 0));
-//            canvas.drawCircle(normalizeX, normalizeY, 10, paint);
-//        }
+        for(int i = 0; i < drawPoints.size(); i++) {
+            int nodeX = drawPoints.get(i).getPos_x();
+            int nodeY = drawPoints.get(i).getPos_y();
+            int normalizeX = (int)((nodeX+0.0)/125*getWidth());
+            int normalizeY = (int)((nodeY+0.0)/115*realHeight+imgOff);
+            paint.setColor(Color.argb(255, 0, 0, 255));
+            canvas.drawCircle(normalizeX, normalizeY, 3, paint);
+        }
         if(currentNode!=null) {
             int normalizeX = (int) ((currentNode.getPos_x() + 0.0) / 125 * getWidth());
             int normalizeY = (int) ((currentNode.getPos_y() + 0.0) / 115 * realHeight + imgOff);
