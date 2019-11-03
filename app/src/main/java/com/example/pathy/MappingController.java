@@ -101,7 +101,7 @@ public class MappingController{
      * @param lat
      * @return
      */
-    public Node coordToNode(double lon, double lat) {
+    public static Node coordToNode(double lon, double lat) {
         double y = lon;
         double x = lat;
 
@@ -141,6 +141,10 @@ public class MappingController{
         if(!hasInit) throw new RuntimeException("Attempted to get room names before data was loaded");
         if(!hasInit) throw new RuntimeException("Attempted to close a non-initialized map");
         return new LinkedList<>(roomToEntryNodes.keySet());
+    }
+
+    public static Node getNode(int x, int y){
+        return map.getNode(x,y);
     }
 
     /**

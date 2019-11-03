@@ -17,6 +17,7 @@ public class MainActivity extends AppCompatActivity  {
     public SearchView userSearch;
     public SearchBar userSearchClass;
     public LinearLayout suggestion;
+    public static LocationCoords location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -28,7 +29,7 @@ public class MainActivity extends AppCompatActivity  {
         userSearch.setSubmitButtonEnabled(false);
         userSearch.setQueryHint("Type a room...");
         userSearch.setIconifiedByDefault(false);
-//        userSearchClass.registerSearchListeners(userSearch, suggestion, getApplicationContext());
+        userSearchClass.registerSearchListeners(userSearch, suggestion, getApplicationContext());
         MapPanning mp = findViewById(R.id.im_move_zoom_rotate);
         /*for(int x = 0; x < 125; x++)
         {

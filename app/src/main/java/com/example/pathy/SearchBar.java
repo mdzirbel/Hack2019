@@ -4,37 +4,33 @@ package com.example.pathy;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
-import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
-import java.util.ArrayList;
-import java.util.Arrays;
+import com.example.pathy.aStar.Node;
+
 import java.util.Collections;
 import java.util.List;
 
 public class SearchBar {
 
-    SearchView search;
+    private static SearchView search;
 
     public SearchBar(SearchView searchView) {
         search = searchView;
     }
 
-    private static final String[] SUGGESTLIST = {"Archie M. Griffin Grand Ballroom",
-            "Senate Chambers", "Student-Alumni Council Room", "Sphinx Centennial Leadership Suite",
-            "Ohio Staters, Inc. Founders Room", "Ohio Staters, Inc. Traditions Room",
-            "Glass Art Lounge", "Keith B. Key Center for Student Leadership and Service",
-            "Administrative Office Suite", "Danny Price Student Lounge"};
-
-    public static String userInput;
+//    private static final String[] SUGGESTLIST = {"Archie M. Griffin Grand Ballroom",
+//            "Senate Chambers", "Student-Alumni Council Room", "Sphinx Centennial Leadership Suite",
+//            "Ohio Staters, Inc. Founders Room", "Ohio Staters, Inc. Traditions Room",
+//            "Glass Art Lounge", "Keith B. Key Center for Student Leadership and Service",
+//            "Administrative Office Suite", "Danny Price Student Lounge"};
 
 
-    void registerSearchListeners(final SearchView userSearch, final LinearLayout suggestion, final Context con) {
+    static void registerSearchListeners(final SearchView userSearch, final LinearLayout suggestion, final Context con) {
         userSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -49,7 +45,7 @@ public class SearchBar {
                 Toast.makeText(con, "Input: " + newText, Toast.LENGTH_LONG).show();
                 Log.e("Text change", "Input: " + newText);
 
-                dropDownList(newText, suggestion, con, userSearch);
+                dropDownList(newText, suggestion, con);
 
                 return false;
             }
@@ -57,19 +53,12 @@ public class SearchBar {
     }
 
 
-    public void dropDownList(String text, final LinearLayout suggestion, Context context, final SearchView userSearch) {
-        List<String> rooms = new ArrayList<String>();
-        rooms = MappingController.getRoomNames();
+    private static void dropDownList(String text, final LinearLayout suggestion, Context context) {
+        List<String> rooms = MappingController.getRoomNames();
         Collections.sort(rooms);
         suggestion.removeAllViews();
         int length = text.length();
         suggestion.getLayoutParams().height = 0;
-
-        if (!userSearch.isIconified()) {
-            userSearch.setIconified(true);
-        } else {
-            userSearch.setIconified(false);
-        }
 
 
         if (text.length() == 0) {
@@ -84,8 +73,9 @@ public class SearchBar {
                     button.setText(rooms.get(i));
                     button.setBackgroundResource(R.drawable.border);
                     button.setBackgroundColor(Color.TRANSPARENT);
-                    button.setOnClickListener(onSuggestionClickListener);
                     suggestion.addView(button);
+                    button.setOnClickListener(onSuggestionClickListener);
+
                 }
             }
         }
@@ -93,8 +83,8 @@ public class SearchBar {
 
     }
 
-    // For clicking the suggestions
-    private View.OnClickListener onSuggestionClickListener = new View.OnClickListener() {
+//    // For clicking the suggestions
+    static private View.OnClickListener onSuggestionClickListener = new View.OnClickListener() {
         @Override
         public void onClick(View v) {
 
@@ -108,9 +98,12 @@ public class SearchBar {
 
     private static void submitQuery(String query) {
 
-
-
         Log.d("SUMBIT QUERY", query);
+
+        Node startNode = MainActivity.location.currentNode;
+
+        MappingController.getPathBetween(startNode, query);
+
     }
 
 //getRoomNodes(name)
