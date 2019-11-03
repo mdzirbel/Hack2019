@@ -101,7 +101,7 @@ public class MappingController{
      * @param lat
      * @return
      */
-    public Node coordToNode(double lon, double lat) {
+    public static Node coordToNode(double lon, double lat) {
         double y = lon;
         double x = lat;
 

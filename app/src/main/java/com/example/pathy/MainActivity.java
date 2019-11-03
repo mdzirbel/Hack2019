@@ -11,10 +11,13 @@ import java.io.File;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import com.example.pathy.aStar.Node;
+
 public class MainActivity extends AppCompatActivity  {
     public SearchView userSearch;
     public SearchBar userSearchClass;
     public LinearLayout suggestion;
+    public LocationCoords location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

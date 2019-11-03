@@ -12,6 +12,8 @@ import android.widget.SearchView;
 import android.widget.SimpleCursorAdapter;
 import android.widget.Toast;
 
+import com.example.pathy.aStar.Node;
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
@@ -56,7 +58,7 @@ public class SearchBar {
     }
 
 
-    public static void dropDownList(String text, final LinearLayout suggestion, Context context, final SearchView userSearch) {
+    public void dropDownList(String text, final LinearLayout suggestion, Context context, final SearchView userSearch) {
         List<String> rooms = new ArrayList<String>();
         rooms = MappingController.getRoomNames();
         Collections.sort(rooms);
@@ -108,11 +110,14 @@ public class SearchBar {
         }
     };
 
-    private static void submitQuery(String query) {
-
-
+    private void submitQuery(String query) {
 
         Log.d("SUMBIT QUERY", query);
+
+        Node startNode = MainActivity.location.currentNode;
+
+        MappingController.getPathBetween(startnode, query);
+
     }
 
 //getRoomNodes(name)
