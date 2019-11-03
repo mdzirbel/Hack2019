@@ -16,19 +16,18 @@
 
     <SearchView
         android:id="@+id/search"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="80dp"
+        android:layout_width="358dp"
+        android:layout_height="56dp"
+        android:layout_marginBottom="595dp"
         android:actionViewClass="android.widget.SearchView"
         android:background="#FFFFFF"
         android:focusable="true"
         android:showAsAction="collapseActionView|ifRoom"
-        app:layout_constraintBottom_toTopOf="@+id/im_move_zoom_rotate"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toEndOf="@+id/imageButtonSettings"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.666" >
+        app:layout_constraintVertical_bias="0.0">
 
     </SearchView>
 
@@ -40,6 +39,7 @@
         android:layout_marginEnd="16dp"
         android:background="#00FFFFFF"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.529"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search">
 
@@ -52,21 +52,33 @@
             android:orientation="vertical" />
     </ScrollView>
 
+    <ImageButton
+        android:id="@+id/imageButtonSettings"
+        android:layout_width="56dp"
+        android:layout_height="56dp"
+        android:layout_marginBottom="595dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/search"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        app:srcCompat="@android:drawable/ic_menu_preferences" />
+
     <!--    <![CDATA[-->
 
 
+    <!--    android:layout_height="wrap_content"-->
+    <!--        android:layout_marginTop="27dp"-->
+    <!--        android:layout_marginEnd="61dp"-->
+    <!--        android:layout_marginBottom="62dp"-->
+    <!--        android:src="@drawable/union_floor_2"-->
+    <!--        app:layout_constraintBottom_toBottomOf="parent"-->
+    <!--        app:layout_constraintEnd_toEndOf="parent"-->
+    <!--        app:layout_constraintStart_toStartOf="parent"-->
+    <!--        app:layout_constraintTop_toBottomOf="@+id/search"-->
+    <!--         />-->
 
-<!--    android:layout_height="wrap_content"-->
-<!--        android:layout_marginTop="27dp"-->
-<!--        android:layout_marginEnd="61dp"-->
-<!--        android:layout_marginBottom="62dp"-->
-<!--        android:src="@drawable/union_floor_2"-->
-<!--        app:layout_constraintBottom_toBottomOf="parent"-->
-<!--        app:layout_constraintEnd_toEndOf="parent"-->
-<!--        app:layout_constraintStart_toStartOf="parent"-->
-<!--        app:layout_constraintTop_toBottomOf="@+id/search"-->
-<!--         />-->
 
-
-<!--]]>-->
+    <!--]]>-->
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,23 +1,20 @@
 package com.example.pathy;
 
+import android.content.Intent;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.ImageButton;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
-import android.util.Log;
-import android.view.MotionEvent;
-import android.widget.SearchView;
-
-import java.io.File;
 
 import androidx.appcompat.app.AppCompatActivity;
-
-import com.example.pathy.aStar.Node;
 
 public class MainActivity extends AppCompatActivity  {
     public SearchView userSearch;
     public SearchBar userSearchClass;
     public LinearLayout suggestion;
     public static LocationCoords location;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +30,16 @@ public class MainActivity extends AppCompatActivity  {
         userSearch.setIconifiedByDefault(false);
         userSearchClass.registerSearchListeners(userSearch, suggestion, getApplicationContext());
         MapPanning mp = findViewById(R.id.im_move_zoom_rotate);
+
+        ImageButton settingsButton = findViewById(R.id.imageButtonSettings);
+        settingsButton.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent startIntent = new Intent(getApplicationContext(), SettingsActivity.class);
+                startActivity(startIntent);
+            }
+        });
+
         /*for(int x = 0; x < 125; x++)
         {
             for(int y = 0; y < 115; y++)
