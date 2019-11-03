@@ -41,6 +41,7 @@ public class MappingController{
                 loadmap(mapStream);
                 hasInit = true;
                 Log.d("Map loading", roomsAsStr());
+                Log.d("Map loading", getMetaAsStr());
                 Log.d("Map loading", "Map loaded sucessfully");
             }
         }
@@ -218,6 +219,14 @@ public class MappingController{
     private static String getSafeMeta(String key){
         if(!metadata.containsKey(key)) throw new RuntimeException(key + " not found in metadata");
         return metadata.get(key);
+    }
+
+    private static String getMetaAsStr(){
+        String out = "";
+        for(Map.Entry<String, String> entry : metadata.entrySet()){
+            out += "[" + entry.getKey() + " : " + entry.getValue() + "], ";
+        }
+        return out;
     }
 
     private static String roomsAsStr(){
