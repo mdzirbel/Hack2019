@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class SearchBar {
@@ -24,12 +25,12 @@ public class SearchBar {
         search = searchView;
     }
 
-
     private static final String[] SUGGESTLIST = {"Archie M. Griffin Grand Ballroom",
             "Senate Chambers", "Student-Alumni Council Room", "Sphinx Centennial Leadership Suite",
             "Ohio Staters, Inc. Founders Room", "Ohio Staters, Inc. Traditions Room",
             "Glass Art Lounge", "Keith B. Key Center for Student Leadership and Service",
             "Administrative Office Suite", "Danny Price Student Lounge"};
+
     private SimpleCursorAdapter adapter;
 
     void registerSearchListeners(final SearchView userSearch, final LinearLayout suggestion, final Context con) {
@@ -54,22 +55,35 @@ public class SearchBar {
         });
     }
 
-    private void dropDownList(String text, LinearLayout suggestion, Context context, SearchView userSearch) {
-        Arrays.sort(SUGGESTLIST);
+
+    public static void dropDownList(String text, final LinearLayout suggestion, Context context, final SearchView userSearch) {
+        List<String> rooms = new ArrayList<String>();
+        rooms = MappingController.getRoomNames();
+        Collections.sort(rooms);
         suggestion.removeAllViews();
         int length = text.length();
-        List<String> suggested = new ArrayList<>();
         suggestion.getLayoutParams().height = 0;
+
+        userSearch.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View v, MotionEvent event) {
+                suggestion.removeAllViews();
+                userSearch.clearFocus();
+                return false;
+            }
+        });
+
 
         if (text.length() == 0) {
             suggestion.getLayoutParams().height = 0;
             suggestion.removeAllViews();
         } else {
             suggestion.getLayoutParams().height = 600;
-            for (String s : SUGGESTLIST) {
-                if (text.compareToIgnoreCase(s.substring(0, length)) == 0) {
+
+            for (int i = 0; i < rooms.size(); i++) {
+                if (text.compareToIgnoreCase(rooms.get(i).substring(0, length)) == 0) {
                     Button button = new Button(context);
-                    button.setText(s);
+                    button.setText(rooms.get(i));
                     button.setBackgroundResource(R.drawable.border);
                     button.setBackgroundColor(Color.TRANSPARENT);
                     button.setOnClickListener(onSuggestionClickListener);
@@ -77,7 +91,6 @@ public class SearchBar {
                 }
             }
         }
-        java.util.Collections.sort(suggested);
 
 
     }
@@ -102,5 +115,5 @@ public class SearchBar {
         Log.d("SUMBIT QUERY", query);
     }
 
-getRoomNodes(name)
+//getRoomNodes(name)
 }

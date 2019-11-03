@@ -2,11 +2,15 @@ package com.example.pathy;
 
 import android.content.Context;
 import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.Paint;
 import android.util.AttributeSet;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.ScaleGestureDetector;
 import androidx.appcompat.widget.AppCompatImageView;
+
+import java.util.LinkedList;
 
 public class MapPanning extends AppCompatImageView {
 
@@ -131,14 +135,14 @@ public class MapPanning extends AppCompatImageView {
 
         return true;
     }
-
+    LinkedList<int[]> drawPoints = new LinkedList<>();
     @Override
     public void onDraw(Canvas canvas) {
 
         canvas.save();
 
         canvas.translate(mPosX, mPosY);
-
+        Log.d("MMFDebug", String.valueOf(mPosX)+":"+mPosY+":"+mScaleFactor);
         if (mScaleDetector.isInProgress()) {
             canvas.scale(mScaleFactor, mScaleFactor, mScaleDetector.getFocusX(), mScaleDetector.getFocusY());
         }
@@ -146,6 +150,17 @@ public class MapPanning extends AppCompatImageView {
             canvas.scale(mScaleFactor, mScaleFactor, mLastGestureX, mLastGestureY);
         }
         super.onDraw(canvas);
+        Paint paint = new Paint();
+        paint.setColor(Color.BLACK);
+        paint.setStyle(Paint.Style.FILL);
+        drawPoints.add(new int[]{0,0});
+        drawPoints.add(new int[]{125,115});
+        drawPoints.add(new int[]{125,0});
+        drawPoints.add(new int[]{0,115});
+        int realHeight = getHeight()-275*2;
+        for(int i = 0; i < drawPoints.size(); i++) {
+            canvas.drawCircle((int)((drawPoints.get(i)[0]+0.0)/125*getWidth()), (int)((drawPoints.get(i)[1]+0.0)/115*realHeight+275), 10, paint);
+        }
         canvas.restore();
     }
 

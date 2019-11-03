@@ -12,7 +12,10 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Map;
 
@@ -20,6 +23,7 @@ public class MappingController{
     
     private static MapV2 map = null;
     private static Map<String, String> metadata;
+    private static Map<String, List<Node>> roomToEntryNodes;
     private static boolean hasInit = false;
     private static final String BLDG = "union";
 
@@ -36,6 +40,8 @@ public class MappingController{
                 getMetadata(dataStream);
                 loadmap(mapStream);
                 hasInit = true;
+                Log.d("Map loading", roomsAsStr());
+                Log.d("Map loading", "Map loaded sucessfully");
             }
         }
         catch (FileNotFoundException e) {
@@ -94,8 +100,20 @@ public class MappingController{
      * @returns the name of the map from the metadata file
      */
     public static String getMapName(){
-        if(!hasInit) throw new RuntimeException("Attempted to close a non-initialized map");
+        if(!hasInit) throw new RuntimeException("Attempted to get map name before data was loaded");
         return getSafeMeta("name");
+    }
+
+    public static List<Node> getRoomNodes(String roomName){
+        if(!hasInit) throw new RuntimeException("Attempted to get room nodes before data was loaded");
+        if(!roomToEntryNodes.containsKey(roomName)) throw new RuntimeException(roomName + " not found in metadata");
+        return roomToEntryNodes.get(roomName);
+    }
+
+    public static List<String> getRoomNames(){
+        if(!hasInit) throw new RuntimeException("Attempted to get room names before data was loaded");
+        if(!hasInit) throw new RuntimeException("Attempted to close a non-initialized map");
+        return new LinkedList<>(roomToEntryNodes.keySet());
     }
 
     /**
@@ -104,15 +122,35 @@ public class MappingController{
      */
     private static void getMetadata(InputStream metaStream){
         metadata = new HashMap<>();
+        roomToEntryNodes = new HashMap<>();
         JsonReader reader = new JsonReader(new InputStreamReader(metaStream));
         try {
             reader.beginObject();
             String currname = "", currval = "";
             while(reader.hasNext()){
                 currname = reader.nextName();
-                currval = reader.nextString();
-                metadata.put(currname, currval);
+                if(!currname.equalsIgnoreCase("rooms")) {
+                    currval = reader.nextString();
+                    metadata.put(currname, currval);
+                }
+                else{
+                    reader.beginObject();
+                    String roomName;
+                    while(reader.hasNext()){
+                        roomName = reader.nextName();
+                        reader.beginArray();
+                        List<Node> roomNodes = new LinkedList<>();
+                        while (reader.hasNext()){
+                            roomNodes.add(new Node(reader.nextInt(), reader.nextInt()));
+                        }
+                        reader.endArray();
+                        roomToEntryNodes.put(roomName, roomNodes);
+
+                    }
+                    reader.endObject();
+                }
             }
+            reader.endObject();
 
         } catch (IOException e) {
             Log.e("Map loading", "Can not read file: " + e.toString());
@@ -146,6 +184,22 @@ public class MappingController{
     private static String getSafeMeta(String key){
         if(!metadata.containsKey(key)) throw new RuntimeException(key + " not found in metadata");
         return metadata.get(key);
+    }
+
+    private static String roomsAsStr(){
+        String out = "";
+        for(String roomName : getRoomNames()){
+            out += roomName + " " + nodesAsStr(roomName) + ", ";
+        }
+        return out;
+    }
+
+    private static String nodesAsStr(String roomName){
+        String out = "[";
+        for(Node entry : getRoomNodes(roomName)){
+            out += entry.toString() + ", ";
+        }
+        return out + "]";
     }
 
 
