@@ -25,7 +25,7 @@ public class MainActivity extends AppCompatActivity  {
         setContentView(R.layout.activity_main);
         Networking.startDownloadTask(getApplicationContext(), "union");
         userSearchClass = new SearchBar((SearchView) findViewById(R.id.search));
-        location = new LocationCoords(getApplicationContext());
+        location = new LocationCoords(getApplicationContext(), this);
         userSearch = findViewById(R.id.search);
         suggestion = findViewById(R.id.linearLayout);
         userSearch.setSubmitButtonEnabled(false);

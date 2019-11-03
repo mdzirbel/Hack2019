@@ -107,7 +107,7 @@ public class MappingController{
 
         // Normalize to 0, 0
         y -= Double.parseDouble(getSafeMeta("gps_zero:y"));
-        x -= Double.parseDouble(getSafeMeta("gps_zero:y"));
+        x -= Double.parseDouble(getSafeMeta("gps_zero:x"));
 
         // Rotate
         double sin = Double.parseDouble(getSafeMeta("rotation:sin"));

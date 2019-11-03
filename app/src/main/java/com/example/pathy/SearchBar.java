@@ -100,10 +100,15 @@ public class SearchBar {
 
     private static void submitQuery(String query) {
 
-        Log.d("SUMBIT QUERY", query);
+        Log.d("SUBMIT QUERY", query);
+        Log.d("SUBMIT QUERY", ""+MainActivity.location.currentNode);
 
-        MapPanning.drawPoints = (LinkedList) MappingController.getPathBetween(MainActivity.location.currentNode, query);
-
+        if (MainActivity.location.currentNode == null) {
+            Log.e("SUBMIT QUERY", "Passed null pointer");
+        }
+        else {
+            MapPanning.drawPoints = (LinkedList) MappingController.getPathBetween(MainActivity.location.currentNode, query);
+        }
     }
 
 //getRoomNodes(name)
