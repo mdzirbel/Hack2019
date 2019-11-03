@@ -61,6 +61,28 @@ public class MappingController{
         return map.getPathBetween(start, end, 0);
     }
 
+    public Node coordToXY(double lon, double lat) {
+        double y = lon;
+        double x = lat;
+
+        // Normalize to 0, 0
+        y -= Double.parseDouble(getSafeMeta("gps_zero:y"));
+        x -= Double.parseDouble(getSafeMeta("gps_zero:y"));
+
+        // Rotate
+        double sin = Double.parseDouble(getSafeMeta("rotation:sin"));
+        double cos = Double.parseDouble(getSafeMeta("rotation:cos"));
+
+        y = x * sin + y * cos;
+        x = x * cos - y * sin;
+
+        // Scale
+        x = x * 0.7871 / 0.00001;
+        y = y * 1.1132 / 0.00001;
+
+        return new Node((int) Math.round(x), (int) Math.round(y));
+    }
+
     /**function to get the name of the current map
      * @returns the name of the map from the metadata file
      */
