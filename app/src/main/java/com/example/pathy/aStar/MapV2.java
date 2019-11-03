@@ -1,5 +1,7 @@
 package com.example.pathy.aStar;
 
+import android.util.Log;
+
 import java.io.*;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -37,7 +39,7 @@ public class MapV2 {
 
         Scanner scanner = new Scanner(this.reader);
         loadedNodes = new Node[region.y_size][region.x_size];
-        //System.out.println("created array");
+        Log.d("ASTAR", "Map array created");
         for(int r = 0; r < region.y_off + region.y_size; r++){
             //System.out.println("row " + r);
             if(r <  region.y_off){
@@ -54,7 +56,7 @@ public class MapV2 {
         }
         scanner.close();
         loadedRegion = region;
-        //System.out.println("loaded " + region);
+        Log.d("ASTAR","loaded " + region);
     }
 
     /**
