@@ -31,7 +31,8 @@ public class SearchBar {
             "Glass Art Lounge", "Keith B. Key Center for Student Leadership and Service",
             "Administrative Office Suite", "Danny Price Student Lounge"};
 
-    private SimpleCursorAdapter adapter;
+    public static String userInput;
+
 
     void registerSearchListeners(final SearchView userSearch, final LinearLayout suggestion, final Context con) {
         userSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
@@ -64,14 +65,11 @@ public class SearchBar {
         int length = text.length();
         suggestion.getLayoutParams().height = 0;
 
-        userSearch.setOnTouchListener(new View.OnTouchListener() {
-            @Override
-            public boolean onTouch(View v, MotionEvent event) {
-                suggestion.removeAllViews();
-                userSearch.clearFocus();
-                return false;
-            }
-        });
+        if (!userSearch.isIconified()) {
+            userSearch.setIconified(true);
+        } else {
+            userSearch.setIconified(false);
+        }
 
 
         if (text.length() == 0) {

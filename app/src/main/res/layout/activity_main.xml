@@ -42,7 +42,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="80dp"
         android:actionViewClass="android.widget.SearchView"
-        android:background="#00FFFFFF"
+        android:background="#FFFFFF"
         android:focusable="true"
         android:showAsAction="collapseActionView|ifRoom"
         app:layout_constraintBottom_toTopOf="@+id/im_move_zoom_rotate"
