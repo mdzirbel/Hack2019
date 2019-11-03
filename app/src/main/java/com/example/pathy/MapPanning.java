@@ -163,9 +163,10 @@ public class MapPanning extends AppCompatImageView {
             int nodeY = drawPoints.get(i).getPos_y();
             int normalizeX = (int)((nodeX+0.0)/125*getWidth());
             int normalizeY = (int)((nodeY+0.0)/115*realHeight+imgOff);
-//            canvas.drawCircle(normalizeX, normalizeY, 10, paint);
+            paint.setColor(Color.argb(255, drawPoints.get(i).canTraverse() ? 0 : 255, drawPoints.get(i).canTraverse() ? 255 : 0, 0));
+            canvas.drawCircle(normalizeX, normalizeY, 10, paint);
         }
-        for(int i = 0; i < drawPoints.size()-1; i++) {
+        /*for(int i = 0; i < drawPoints.size()-1; i++) {
             int nodeX1 = drawPoints.get(i).getPos_x();
             int nodeY1 = drawPoints.get(i).getPos_y();
             int nodeX2 = drawPoints.get(i+1).getPos_x();
@@ -175,7 +176,7 @@ public class MapPanning extends AppCompatImageView {
             int normalizeX2 = (int)((nodeX2+0.0)/125*getWidth());
             int normalizeY2 = (int)((nodeY2+0.0)/115*realHeight+imgOff);
             canvas.drawLine(normalizeX1, normalizeY1, normalizeX2, normalizeY2, paint);
-        }
+        }*/
         canvas.restore();
     }
 
