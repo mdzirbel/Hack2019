@@ -40,6 +40,7 @@ public class MapV2 {
         Scanner scanner = new Scanner(this.reader);
         loadedNodes = new Node[region.y_size][region.x_size];
         Log.d("ASTAR", "Map array created");
+        Log.d("ASTAR", "Loading region " + region.debug());
         for(int r = 0; r < region.y_off + region.y_size; r++){
             //System.out.println("row " + r);
             if(r <  region.y_off){
