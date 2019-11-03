@@ -84,6 +84,13 @@ public class Networking {
                 downloadFromServer(context, building + ".map");
                 downloadFromServer(context, building + ".met");
                 MappingController.allocateMap(context);
+                for(int x = 0; x < 125; x++)
+                {
+                    for(int y = 0; y < 115; y++)
+                    {
+                        MapPanning.drawPoints.add(MappingController.getNode(x, y));
+                    }
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
