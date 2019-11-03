@@ -4,7 +4,6 @@ package com.example.pathy;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
-import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
@@ -13,14 +12,12 @@ import android.widget.Toast;
 
 import com.example.pathy.aStar.Node;
 
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 public class SearchBar {
 
-    static SearchView search;
+    private static SearchView search;
 
     public SearchBar(SearchView searchView) {
         search = searchView;
@@ -33,12 +30,12 @@ public class SearchBar {
 //            "Administrative Office Suite", "Danny Price Student Lounge"};
 
 
-    public static void registerSearchListeners(final SearchView userSearch, final LinearLayout suggestion, final Context con) {
+    static void registerSearchListeners(final SearchView userSearch, final LinearLayout suggestion, final Context con) {
         userSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.d("QUERY SUBMIT", "Input: " + query);
-                //submitQuery(query);
+                submitQuery(query);
                 return false;
             }
 
@@ -48,7 +45,7 @@ public class SearchBar {
                 Toast.makeText(con, "Input: " + newText, Toast.LENGTH_LONG).show();
                 Log.e("Text change", "Input: " + newText);
 
-                dropDownList(newText, suggestion, con, userSearch);
+                dropDownList(newText, suggestion, con);
 
                 return false;
             }
@@ -56,9 +53,8 @@ public class SearchBar {
     }
 
 
-    public void dropDownList(String text, final LinearLayout suggestion, Context context, final SearchView userSearch) {
-        List<String> rooms = new ArrayList<String>();
-        rooms = MappingController.getRoomNames();
+    private static void dropDownList(String text, final LinearLayout suggestion, Context context) {
+        List<String> rooms = MappingController.getRoomNames();
         Collections.sort(rooms);
         suggestion.removeAllViews();
         int length = text.length();
@@ -100,13 +96,13 @@ public class SearchBar {
         }
     };
 
-    private void submitQuery(String query) {
+    private static void submitQuery(String query) {
 
         Log.d("SUMBIT QUERY", query);
 
         Node startNode = MainActivity.location.currentNode;
 
-        MappingController.getPathBetween(startnode, query);
+        MappingController.getPathBetween(startNode, query);
 
     }
 

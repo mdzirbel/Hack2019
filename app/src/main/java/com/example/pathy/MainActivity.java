@@ -17,7 +17,7 @@ public class MainActivity extends AppCompatActivity  {
     public SearchView userSearch;
     public SearchBar userSearchClass;
     public LinearLayout suggestion;
-    public LocationCoords location;
+    public static LocationCoords location;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
