@@ -20,15 +20,16 @@ public class MappingController{
     
     private static MapV2 map;
     private static Map<String, String> metadata;
+    private static final String BLDG = "union";
 
     /**
      * using a given context load the current map into memory
      * @param context
      */
-    public void allocateMap(Context context){
+    public static void allocateMap(Context context){
         try {
-            InputStream mapStream = context.openFileInput("union.map");
-            InputStream dataStream = context.openFileInput("union.met");
+            InputStream mapStream = context.openFileInput(BLDG + ".map");
+            InputStream dataStream = context.openFileInput(BLDG + ".met");
             if (mapStream != null && dataStream != null) {
                 getMetadata(dataStream);
                 loadmap(mapStream);
@@ -40,7 +41,7 @@ public class MappingController{
 
     }
 
-    public void close(){
+    public static void close(){
         map.close();
         metadata.clear();
     }
@@ -51,14 +52,14 @@ public class MappingController{
      * @param end node to end mapping at
      * @return lis of nodes to get from start to end including start and end
      */
-    public List<Node> getPathBetween(Node start, Node end){
+    public static List<Node> getPathBetween(Node start, Node end){
         return map.getPathBetween(start, end, 0);
     }
 
     /**function to get the name of the current map
      * @returns the name of the map from the metadata file
      */
-    public String getMapName(){
+    public static String getMapName(){
         return getSafeMeta("name");
     }
 
@@ -66,7 +67,7 @@ public class MappingController{
      * internal function to set up the metadata hashmap
      * @param metaStream input stream of the metadata file
      */
-    private void getMetadata(InputStream metaStream){
+    private static void getMetadata(InputStream metaStream){
         metadata = new HashMap<>();
         JsonReader reader = new JsonReader(new InputStreamReader(metaStream));
         try {
@@ -94,7 +95,7 @@ public class MappingController{
      * internal function to load the graph map into memory for use
      * @param mapStream input stream of the map file
      */
-    private void loadmap(InputStream mapStream){
+    private static void loadmap(InputStream mapStream){
         //pick up the size paramters and load the map
         int size_x = Integer.parseInt(getSafeMeta("size:x"));
         int size_y = Integer.parseInt(getSafeMeta("size:y"));
@@ -107,7 +108,7 @@ public class MappingController{
      * @returns the requested value
      * @throws RuntimeException if the specified key was not found in the metadata file
      */
-    private String getSafeMeta(String key){
+    private static String getSafeMeta(String key){
         if(!metadata.containsKey(key)) throw new RuntimeException(key + " not found in metadata");
         return metadata.get(key);
     }
