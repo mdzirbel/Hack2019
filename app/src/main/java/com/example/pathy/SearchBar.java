@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.example.pathy.aStar.Node;
 
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 public class SearchBar {
@@ -92,18 +93,22 @@ public class SearchBar {
             String buttonText = (String) ((Button) v).getText();
 
             // Fill in the whole text in the search box and send the query
-            search.setQuery(buttonText, true);
+//            search.setQuery(buttonText, false);
+            submitQuery(buttonText);
         }
     };
 
     private static void submitQuery(String query) {
 
-        Log.d("SUMBIT QUERY", query);
+        Log.d("SUBMIT QUERY", query);
+        Log.d("SUBMIT QUERY", ""+MainActivity.location.currentNode);
 
-        Node startNode = MainActivity.location.currentNode;
-
-        MappingController.getPathBetween(startNode, query);
-
+        if (MainActivity.location.currentNode == null) {
+            Log.e("SUBMIT QUERY", "Passed null pointer");
+        }
+        else {
+            MapPanning.drawPoints = (LinkedList) MappingController.getPathBetween(MainActivity.location.currentNode, query);
+        }
     }
 
 //getRoomNodes(name)

@@ -41,6 +41,7 @@ public class MappingController{
                 loadmap(mapStream);
                 hasInit = true;
                 Log.d("Map loading", roomsAsStr());
+                Log.d("Map loading", getMetaAsStr());
                 Log.d("Map loading", "Map loaded sucessfully");
             }
         }
@@ -57,6 +58,10 @@ public class MappingController{
         hasInit = false;
     }
 
+    public static boolean isHasInit() {
+        return hasInit;
+    }
+
     /**
      * function to generate a list of nodes to go from the start node to the end node
      * @param start node to start at
@@ -68,7 +73,7 @@ public class MappingController{
         if(!hasInit) throw new RuntimeException("Attempted to close a non-initialized map");
         List<List<Node>> solutions = new LinkedList<>();
         for(Node end : ends) {
-            List<Node> solution = map.getPathBetween(start, end, 0);
+            List<Node> solution = map.getPathBetween(start, end);
             if(solution.size() > 0) solutions.add(solution);
         }
 
@@ -107,7 +112,7 @@ public class MappingController{
 
         // Normalize to 0, 0
         y -= Double.parseDouble(getSafeMeta("gps_zero:y"));
-        x -= Double.parseDouble(getSafeMeta("gps_zero:y"));
+        x -= Double.parseDouble(getSafeMeta("gps_zero:x"));
 
         // Rotate
         double sin = Double.parseDouble(getSafeMeta("rotation:sin"));
@@ -218,6 +223,14 @@ public class MappingController{
     private static String getSafeMeta(String key){
         if(!metadata.containsKey(key)) throw new RuntimeException(key + " not found in metadata");
         return metadata.get(key);
+    }
+
+    private static String getMetaAsStr(){
+        String out = "";
+        for(Map.Entry<String, String> entry : metadata.entrySet()){
+            out += "[" + entry.getKey() + " : " + entry.getValue() + "], ";
+        }
+        return out;
     }
 
     private static String roomsAsStr(){
