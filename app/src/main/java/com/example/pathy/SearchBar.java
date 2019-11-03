@@ -13,6 +13,7 @@ import android.widget.Toast;
 import com.example.pathy.aStar.Node;
 
 import java.util.Collections;
+import java.util.LinkedList;
 import java.util.List;
 
 public class SearchBar {
@@ -102,7 +103,7 @@ public class SearchBar {
 
         Node startNode = MainActivity.location.currentNode;
 
-        MappingController.getPathBetween(startNode, query);
+        MapPanning.drawPoints = (LinkedList) MappingController.getPathBetween(startNode, query);
 
     }
 
