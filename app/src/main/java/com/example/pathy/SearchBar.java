@@ -93,7 +93,7 @@ public class SearchBar {
             String buttonText = (String) ((Button) v).getText();
 
             // Fill in the whole text in the search box and send the query
-//            search.setQuery(buttonText, false);
+            search.setQuery(buttonText, false);
             submitQuery(buttonText);
         }
     };
