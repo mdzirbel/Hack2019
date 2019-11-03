@@ -36,7 +36,7 @@ public class SearchBar {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 Log.d("QUERY SUBMIT", "Input: " + query);
-                submitQuery(query);
+                submitQuery(query, con);
                 return false;
             }
 
@@ -94,11 +94,11 @@ public class SearchBar {
 
             // Fill in the whole text in the search box and send the query
             search.setQuery(buttonText, false);
-            submitQuery(buttonText);
+            submitQuery(buttonText, v.getContext());
         }
     };
 
-    private static void submitQuery(String query) {
+    private static void submitQuery(String query, Context context) {
 
         Log.d("SUBMIT QUERY", query);
         Log.d("SUBMIT QUERY", ""+MainActivity.location.currentNode);
@@ -110,6 +110,7 @@ public class SearchBar {
             Log.d("SUBMIT QUERY", "Current node " + MainActivity.location.currentNode);
             Log.d("SUBMIT QUERY", "nearest valid " + MappingController.snapNearestNode(MainActivity.location.currentNode));
             MapPanning.drawPoints = MappingController.getPathBetween(MappingController.snapNearestNode(MainActivity.location.currentNode), query);
+            if(MapPanning.drawPoints.isEmpty()) Toast.makeText(context, "Path not found!", Toast.LENGTH_LONG).show();
         }
     }
 
