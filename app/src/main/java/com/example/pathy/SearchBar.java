@@ -45,7 +45,7 @@ public class SearchBar {
             @Override
             public boolean onQueryTextChange(String newText) {
 
-                Toast.makeText(con, "Input: " + newText, Toast.LENGTH_LONG).show();
+                //Toast.makeText(con, "Input: " + newText, Toast.LENGTH_LONG).show();
                 Log.e("Text change", "Input: " + newText);
 
                 dropDownList(newText, suggestion, con);

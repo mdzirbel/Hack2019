@@ -1,7 +1,10 @@
 package com.example.pathy;
 
 import android.content.Intent;
+import android.graphics.Point;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Display;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.LinearLayout;
@@ -20,6 +23,16 @@ public class MainActivity extends AppCompatActivity  {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+//        Display display = getWindowManager().getDefaultDisplay();
+//        Point size = new Point();
+//        display.getSize(size);
+//        int width = size.x;
+//        int height = size.y;
+//        Log.e("Width", "" + width);
+//        Log.e("height", "" + height);
+
         Networking.startDownloadTask(getApplicationContext(), "union");
         userSearchClass = new SearchBar((SearchView) findViewById(R.id.search));
         location = new LocationCoords(getApplicationContext(), this);
