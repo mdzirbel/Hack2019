@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 public class SearchBar {
@@ -24,11 +25,11 @@ public class SearchBar {
 
 
     public static String userInput;
-    public static final String[] SUGGESTLIST = {"Archie M. Griffin Grand Ballroom",
-            "Senate Chambers", "Student-Alumni Council Room", "Sphinx Centennial Leadership Suite",
-            "Ohio Staters, Inc. Founders Room", "Ohio Staters, Inc. Traditions Room",
-            "Glass Art Lounge", "Keith B. Key Center for Student Leadership and Service",
-            "Administrative Office Suite", "Danny Price Student Lounge"};
+//    public static final String[] SUGGESTLIST = {"Archie M. Griffin Grand Ballroom",
+//            "Senate Chambers", "Student-Alumni Council Room", "Sphinx Centennial Leadership Suite",
+//            "Ohio Staters, Inc. Founders Room", "Ohio Staters, Inc. Traditions Room",
+//            "Glass Art Lounge", "Keith B. Key Center for Student Leadership and Service",
+//            "Administrative Office Suite", "Danny Price Student Lounge"};
     private SimpleCursorAdapter adapter;
 
     public static void registerSearchListeners(final SearchView userSearch, final LinearLayout suggestion, final Context con) {
@@ -55,7 +56,9 @@ public class SearchBar {
     }
 
     public static void dropDownList(String text, final LinearLayout suggestion, Context context, final SearchView userSearch) {
-        Arrays.sort(SUGGESTLIST);
+        List<String> rooms = new ArrayList<String>();
+        rooms = MappingController.getRoomNames();
+        Collections.sort(rooms);
         suggestion.removeAllViews();
         int length = text.length();
         suggestion.getLayoutParams().height = 0;
@@ -75,10 +78,10 @@ public class SearchBar {
             suggestion.removeAllViews();
         } else {
             suggestion.getLayoutParams().height = 600;
-            for (int i = 0; i < SUGGESTLIST.length; i++) {
-                if (text.compareToIgnoreCase(SUGGESTLIST[i].substring(0, length)) == 0) {
+            for (int i = 0; i < rooms.size(); i++) {
+                if (text.compareToIgnoreCase(rooms.get(i).substring(0, length)) == 0) {
                     Button button = new Button(context);
-                    button.setText(SUGGESTLIST[i]);
+                    button.setText(rooms.get(i));
                     button.setBackgroundResource(R.drawable.border);
                     button.setBackgroundColor(Color.TRANSPARENT);
                     suggestion.addView(button);
