@@ -18,31 +18,36 @@ import java.util.Map;
 
 public class MappingController{
     
-    private static MapV2 map;
+    private static MapV2 map = null;
     private static Map<String, String> metadata;
+    private static boolean hasInit = false;
+    private static final String BLDG = "union";
 
     /**
      * using a given context load the current map into memory
      * @param context
      */
-    public void allocateMap(Context context){
+    public static void allocateMap(Context context){
         try {
-            InputStream mapStream = context.openFileInput("union.map");
-            InputStream dataStream = context.openFileInput("union.met");
+            InputStream mapStream = context.openFileInput(BLDG + ".map");
+            InputStream dataStream = context.openFileInput(BLDG + ".met");
             if (mapStream != null && dataStream != null) {
                 getMetadata(dataStream);
                 loadmap(mapStream);
+                hasInit = true;
             }
         }
         catch (FileNotFoundException e) {
-            Log.e("login activity", "File not found: " + e.toString());
+            Log.e("Map loading", "File not found: " + e.toString());
         }
 
     }
 
-    public void close(){
+    public static void close(){
+        if(!hasInit) throw new RuntimeException("Attempted to close a non-initialized map");
         map.close();
         metadata.clear();
+        hasInit = false;
     }
 
     /**
@@ -51,14 +56,44 @@ public class MappingController{
      * @param end node to end mapping at
      * @return lis of nodes to get from start to end including start and end
      */
-    public List<Node> getPathBetween(Node start, Node end){
+    public static List<Node> getPathBetween(Node start, Node end){
+        if(!hasInit) throw new RuntimeException("Attempted to close a non-initialized map");
         return map.getPathBetween(start, end, 0);
+    }
+
+    /**
+     * function to get a node relative to the building latitude and longitude
+     * @param lon
+     * @param lat
+     * @return
+     */
+    public Node coordToNode(double lon, double lat) {
+        double y = lon;
+        double x = lat;
+
+        // Normalize to 0, 0
+        y -= Double.parseDouble(getSafeMeta("gps_zero:y"));
+        x -= Double.parseDouble(getSafeMeta("gps_zero:y"));
+
+        // Rotate
+        double sin = Double.parseDouble(getSafeMeta("rotation:sin"));
+        double cos = Double.parseDouble(getSafeMeta("rotation:cos"));
+
+        y = x * sin + y * cos;
+        x = x * cos - y * sin;
+
+        // Scale
+        x = x * 0.7871 / 0.00001;
+        y = y * 1.1132 / 0.00001;
+
+        return new Node((int) Math.round(x), (int) Math.round(y));
     }
 
     /**function to get the name of the current map
      * @returns the name of the map from the metadata file
      */
-    public String getMapName(){
+    public static String getMapName(){
+        if(!hasInit) throw new RuntimeException("Attempted to close a non-initialized map");
         return getSafeMeta("name");
     }
 
@@ -66,7 +101,7 @@ public class MappingController{
      * internal function to set up the metadata hashmap
      * @param metaStream input stream of the metadata file
      */
-    private void getMetadata(InputStream metaStream){
+    private static void getMetadata(InputStream metaStream){
         metadata = new HashMap<>();
         JsonReader reader = new JsonReader(new InputStreamReader(metaStream));
         try {
@@ -79,7 +114,7 @@ public class MappingController{
             }
 
         } catch (IOException e) {
-            Log.e("login activity", "Can not read file: " + e.toString());
+            Log.e("Map loading", "Can not read file: " + e.toString());
         }
         finally {
             try {
@@ -94,7 +129,7 @@ public class MappingController{
      * internal function to load the graph map into memory for use
      * @param mapStream input stream of the map file
      */
-    private void loadmap(InputStream mapStream){
+    private static void loadmap(InputStream mapStream){
         //pick up the size paramters and load the map
         int size_x = Integer.parseInt(getSafeMeta("size:x"));
         int size_y = Integer.parseInt(getSafeMeta("size:y"));
@@ -107,7 +142,7 @@ public class MappingController{
      * @returns the requested value
      * @throws RuntimeException if the specified key was not found in the metadata file
      */
-    private String getSafeMeta(String key){
+    private static String getSafeMeta(String key){
         if(!metadata.containsKey(key)) throw new RuntimeException(key + " not found in metadata");
         return metadata.get(key);
     }
