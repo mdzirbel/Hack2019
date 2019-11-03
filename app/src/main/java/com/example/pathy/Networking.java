@@ -3,68 +3,83 @@ package com.example.pathy;
 import android.content.Context;
 import android.os.AsyncTask;
 import android.util.Log;
-import android.widget.Toast;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
 import java.net.Socket;
-import java.net.SocketAddress;
-import java.net.URL;
+import java.nio.ByteBuffer;
 
-public class Networking
-{
-    static void downloadFromServer(Context con) throws IOException
-    {
+public class Networking {
+    static void downloadFromServer(Context context, String file) throws IOException {
         Log.d("MMFDebug", "Starting Download...");
         Socket sock = new Socket("10.0.2.2", 8080);
         BufferedInputStream in = new BufferedInputStream(sock.getInputStream());
         BufferedOutputStream out = new BufferedOutputStream(sock.getOutputStream());
         out.write(1);
+        out.write(file.getBytes());
+        out.write(0);
         out.flush();
         Log.d("MMFDebug", "Connected");
 
-        String filename = "test.txt";
         FileOutputStream outputStream;
 
         try {
-            outputStream = con.openFileOutput(filename, Context.MODE_PRIVATE);
+            outputStream = context.openFileOutput(file, Context.MODE_PRIVATE);
+            byte[] lenBuf = new byte[Long.BYTES];
+            in.read(lenBuf);
+            long length = ByteUtils.bytesToLong(lenBuf);
             byte[] buffer = new byte[1024];
-            int read = 0;
-            while ((read = in.read(buffer)) >= 0) {
-                outputStream.write(buffer, 0, read);
+            long i = 0;
+            out:
+            while (true) {
+                in.read(buffer);
+                for (byte b : buffer) {
+                    outputStream.write(b);
+                    i++;
+                    if (i >= length) {
+                        break out;
+                    }
+                }
             }
             outputStream.close();
+            Log.d("MMFDebug", "Disconnecting.");
             out.write(3);
             out.flush();
-            Thread.sleep(100);
+            Thread.sleep(10);
             out.close();
             in.close();
             sock.close();
-            Log.d("MMFDebug", "Done.");
+
+            Log.d("MMFDebug", "Done, Wrote " + (i) + " bytes");
+
         } catch (Exception e) {
             e.printStackTrace();
         }
 
     }
-    static void startDownloadTask(Context con)
-    {
-        DownloadFileFromServerTask task = new DownloadFileFromServerTask(con);
+
+    static void startDownloadTask(Context context, String building) {
+        DownloadFileFromServerTask task = new DownloadFileFromServerTask(context, building);
         task.execute("");
     }
+
     private static class DownloadFileFromServerTask extends AsyncTask<String, Void, String> {
-        Context con;
-        public DownloadFileFromServerTask(Context con)
-        {
-            this.con = con;
+        Context context;
+        String building;
+
+        public DownloadFileFromServerTask(Context context, String building) {
+            this.context = context;
+            this.building = building;
         }
+
         @Override
         protected String doInBackground(String... params) {
             try {
-                downloadFromServer(con);
+                downloadFromServer(context, building + ".map");
+                downloadFromServer(context, building + ".met");
+                MappingController.allocateMap(context);
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -81,6 +96,23 @@ public class Networking
 
         @Override
         protected void onProgressUpdate(Void... values) {
+        }
+    }
+
+    private static class ByteUtils {
+        private static ByteBuffer buffer = ByteBuffer.allocate(Long.BYTES);
+
+        public static byte[] longToBytes(long x) {
+            buffer.clear();
+            buffer.putLong(0, x);
+            return buffer.array();
+        }
+
+        public static long bytesToLong(byte[] bytes) {
+            buffer.clear();
+            buffer.put(bytes, 0, bytes.length);
+            buffer.flip();//need flip
+            return buffer.getLong();
         }
     }
 }
