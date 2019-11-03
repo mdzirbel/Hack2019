@@ -4,6 +4,8 @@ package com.example.pathy;
 import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
+import android.view.MotionEvent;
+import android.view.View;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.SearchView;
@@ -29,7 +31,7 @@ public class SearchBar {
             "Administrative Office Suite", "Danny Price Student Lounge"};
     private SimpleCursorAdapter adapter;
 
-    public static void registerSearchListeners(SearchView userSearch, final LinearLayout suggestion, final Context con) {
+    public static void registerSearchListeners(final SearchView userSearch, final LinearLayout suggestion, final Context con) {
         userSearch.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
@@ -42,7 +44,9 @@ public class SearchBar {
             public boolean onQueryTextChange(String newText) {
                 Toast.makeText(con, "Input: " + newText, Toast.LENGTH_LONG).show();
                 Log.e("Text change", "Input: " + newText);
-                dropDownList(newText, suggestion, con);
+
+                dropDownList(newText, suggestion, con, userSearch);
+
                 return false;
             }
         });
@@ -50,18 +54,27 @@ public class SearchBar {
 
     }
 
-    public static void dropDownList(String text, LinearLayout suggestion, Context context) {
+    public static void dropDownList(String text, LinearLayout suggestion, Context context, SearchView userSearch) {
         Arrays.sort(SUGGESTLIST);
         suggestion.removeAllViews();
         int length = text.length();
         List<String> suggested = new ArrayList<String>();
-        for (int i = 0; i < SUGGESTLIST.length; i++) {
-            if (text.compareToIgnoreCase(SUGGESTLIST[i].substring(0, length)) == 0) {
-                Button button = new Button(context);
-                button.setText(SUGGESTLIST[i]);
-                button.setBackgroundResource(R.drawable.border);
-                button.setBackgroundColor(Color.TRANSPARENT);
-                suggestion.addView(button);
+
+        //userSearch.setOnTouchListener();
+
+        if (text.length() == 0) {
+            userSearch.clearFocus();
+            //suggestion
+            suggestion.removeAllViews();
+        } else {
+            for (int i = 0; i < SUGGESTLIST.length; i++) {
+                if (text.compareToIgnoreCase(SUGGESTLIST[i].substring(0, length)) == 0) {
+                    Button button = new Button(context);
+                    button.setText(SUGGESTLIST[i]);
+                    button.setBackgroundResource(R.drawable.border);
+                    button.setBackgroundColor(Color.TRANSPARENT);
+                    suggestion.addView(button);
+                }
             }
         }
         java.util.Collections.sort(suggested);
