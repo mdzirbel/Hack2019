@@ -123,8 +123,8 @@ public class MapV2 {
      */
     public LinkedList<Node> getPathBetween(Node start, Node end, int buffer){
         //prep for mapping process
-        loadRegion(getEncapRegion(start, end, buffer));
-        System.out.println("loaded " + loadedRegion);
+//        loadRegion(getEncapRegion(start, end, buffer));
+//        System.out.println("loaded " + loadedRegion);
         //make sure we have the loaded node version of the start and end nodes
         start = getNode(start.pos_x, start.pos_y);
         end = getNode(end.pos_x, end.pos_y);
