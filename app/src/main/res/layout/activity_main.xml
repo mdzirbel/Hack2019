@@ -13,13 +13,14 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
         android:layout_marginEnd="8dp"
+        android:actionViewClass="android.widget.SearchView"
+        android:background="#00FFFFFF"
         android:clickable="true"
+        android:focusable="true"
+        android:showAsAction="collapseActionView|ifRoom"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent"
-        android:showAsAction="collapseActionView|ifRoom"
-        android:actionViewClass="android.widget.SearchView"
-        android:focusable="true" />
+        app:layout_constraintTop_toTopOf="parent" />
 
     <com.example.pathy.MapPanning
         android:id="@+id/im_move_zoom_rotate"
@@ -31,7 +32,7 @@
     <ScrollView
         android:id="@+id/suggestion"
         android:layout_width="0dp"
-        android:layout_height="600dp"
+        android:layout_height="100dp"
         android:layout_marginStart="32dp"
         android:layout_marginEnd="32dp"
         android:background="#00FFFFFF"
@@ -46,8 +47,8 @@
             android:layout_height="wrap_content"
             android:background="#FFFFFF"
 
-            android:orientation="vertical"
-            android:padding="5dp" />
+            android:orientation="vertical"/>
+            //android:padding="5dp" />
     </ScrollView>
 
     <!--    <![CDATA[-->

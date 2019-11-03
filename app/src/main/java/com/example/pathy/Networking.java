@@ -12,9 +12,13 @@ import java.net.Socket;
 import java.nio.ByteBuffer;
 
 public class Networking {
+
+    private static final String IP = "134.228.155.169";
+    private static final int PORT = 8080;
+
     static void downloadFromServer(Context context, String file) throws IOException {
         Log.d("MMFDebug", "Starting Download...");
-        Socket sock = new Socket("10.0.2.2", 8080);
+        Socket sock = new Socket(IP, PORT);
         BufferedInputStream in = new BufferedInputStream(sock.getInputStream());
         BufferedOutputStream out = new BufferedOutputStream(sock.getOutputStream());
         out.write(1);

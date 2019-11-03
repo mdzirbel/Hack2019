@@ -25,6 +25,7 @@ public class MappingController{
 
     /**
      * using a given context load the current map into memory
+     * should be called after the files are re-downloaded
      * @param context
      */
     public static void allocateMap(Context context){
