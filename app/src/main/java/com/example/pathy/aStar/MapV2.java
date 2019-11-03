@@ -3,6 +3,7 @@ package com.example.pathy.aStar;
 import java.io.*;
 import java.util.Collections;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.Scanner;
 
 public class MapV2 {
@@ -23,6 +24,7 @@ public class MapV2 {
         this.reader = fileReader;
         this.size_x = size_x;
         this.size_y = size_y;
+        loadRegion(region);
     }
 
     /**
@@ -139,6 +141,22 @@ public class MapV2 {
         //System.out.println("iteration complete");
         return reconsruct(end, start);
 
+    }
+
+    public List<Node> optimizePath(List<Node> unoptimizedPath){
+        for(int i = 1; i < unoptimizedPath.size() - 1; i++){
+            //if prev node is horizontal and next is vertical
+            //or if prev node is vertical and next is horizontal
+            if(Node.isHorizontal(unoptimizedPath.get(i-1), unoptimizedPath.get(i)) &&
+                    Node.isVertical(unoptimizedPath.get(i+1), unoptimizedPath.get(i)) ||
+                    Node.isVertical(unoptimizedPath.get(i-1), unoptimizedPath.get(i)) &&
+                    Node.isHorizontal(unoptimizedPath.get(i+1), unoptimizedPath.get(i))){
+                //remove the redundant node from the list
+                unoptimizedPath.remove(i);
+            }
+        }
+        //path has now been optimized
+        return unoptimizedPath;
     }
 
     private void setGoal(Node goal){
