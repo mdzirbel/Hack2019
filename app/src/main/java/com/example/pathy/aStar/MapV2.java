@@ -71,7 +71,7 @@ public class MapV2 {
                 y > loadedRegion.y_off && y < loadedRegion.y_off + loadedRegion.y_size)
                     return loadedNodes[y - loadedRegion.y_off][x - loadedRegion.x_off];
 
-        throw new ArrayIndexOutOfBoundsException("outside current loaded region");
+        throw new ArrayIndexOutOfBoundsException(x + " " + y + " is outside current loaded region");
     }
 
     public void close(){
