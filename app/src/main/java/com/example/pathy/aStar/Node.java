@@ -50,6 +50,14 @@ public class Node implements Comparable<Node>{
         }
     }
 
+    public static boolean isHorizontal(Node p1, Node p2){
+        return p1.pos_x == p2.pos_x;
+    }
+
+    public static boolean isVertical(Node p1, Node p2){
+        return p1.pos_y == p2.pos_y;
+    }
+
     //needed at load time
     protected int pos_x, pos_y;
     protected TraversalState traversalState;
@@ -99,7 +107,7 @@ public class Node implements Comparable<Node>{
         this.cameFrom = cameFrom;
     }
 
-    public static int distanceTo(Node node1, Node node2){
+    public static int distanceTo(Node node1, Node node2) {
         return (int) Math.sqrt(Math.pow(node1.getPos_x() - node2.getPos_x(), 2) + Math.pow(node1.getPos_y() - node2.getPos_y(), 2));
     }
 
