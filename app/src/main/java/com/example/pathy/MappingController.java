@@ -61,18 +61,19 @@ public class MappingController{
      * function to generate a list of nodes to go from the start node to the end node
      * @param start node to start at
      * @param ends nodes to end mapping at
-     * @return list of nodes to get from start to end including start and end
+     * @return shortest list of nodes to get from start to end including start and end node
      * if the path cannot be made the list will be empty
      */
     public static List<Node> getPathBetween(Node start, List<Node> ends){
         if(!hasInit) throw new RuntimeException("Attempted to close a non-initialized map");
         List<List<Node>> solutions = new LinkedList<>();
         for(Node end : ends) {
-            solutions.add(map.getPathBetween(start, end, 0));
+            List<Node> solution = map.getPathBetween(start, end, 0);
+            if(solution.size() > 0) solutions.add(solution);
         }
 
         //sort collections based on size
-        //smallest first
+        //largest first
         Collections.sort(solutions, new Comparator<List<Node>>() {
             @Override
             public int compare(List<Node> o1, List<Node> o2) {
