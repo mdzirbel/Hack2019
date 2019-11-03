@@ -18,8 +18,8 @@ public class DrawOnImage
         Paint paint = new Paint();
         paint.setColor(Color.BLACK);
         paint.setStyle(Paint.Style.FILL);
-        canvas.drawCircle(d.getBounds().width()/2, d.getBounds().height()/2, 1000, paint);
-        d.draw(canvas);
+        canvas.drawCircle(d.getBounds().width()/2, d.getBounds().height()/2, 100, paint);
+//        d.draw(canvas);
         return d;
     }
 }

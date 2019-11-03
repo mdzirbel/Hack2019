@@ -16,10 +16,6 @@ public class MainActivity extends AppCompatActivity  {
     public SearchBar userSearchClass;
     public LinearLayout suggestion;
 
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -32,7 +28,7 @@ public class MainActivity extends AppCompatActivity  {
         userSearch.setIconifiedByDefault(false);
         userSearchClass.registerSearchListeners(userSearch, suggestion, getApplicationContext());
         MapPanning mp = findViewById(R.id.im_move_zoom_rotate);
-        mp.setImageDrawable(DrawOnImage.drawOnImage(getApplicationContext()));
+//        mp.setImageDrawable(DrawOnImage.drawOnImage(getApplicationContext()));
     }
 
 }

@@ -59,7 +59,7 @@ public class Networking {
             Log.d("MMFDebug", "Done, Wrote " + (i) + " bytes");
 
         } catch (Exception e) {
-            e.printStackTrace();
+            Log.e("MMFDebug", e.getLocalizedMessage());
         }
 
     }
