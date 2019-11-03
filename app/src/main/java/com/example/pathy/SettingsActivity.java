@@ -20,6 +20,7 @@ public class SettingsActivity extends AppCompatActivity {
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
         }
+        //https://code.tutsplus.com/tutorials/how-to-code-a-settings-screen-in-an-android-app--cms-30433
     }
 
     public static class SettingsFragment extends PreferenceFragmentCompat {
