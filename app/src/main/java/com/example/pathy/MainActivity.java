@@ -31,6 +31,21 @@ public class MainActivity extends AppCompatActivity  {
         userSearch.setIconifiedByDefault(false);
         userSearchClass.registerSearchListeners(userSearch, suggestion, getApplicationContext());
         MapPanning mp = findViewById(R.id.im_move_zoom_rotate);
+        /*for(int x = 0; x < 125; x++)
+        {
+            for(int y = 0; y < 115; y++)
+            {
+                MapPanning.drawPoints.add(new Node(x,y));
+            }
+            MapPanning.drawPoints.add(new Node(x,0));
+        }
+        for(int y = 0; y < 115; y++)
+        {
+            for(int x = 0; x < 125; x++)
+            {
+                MapPanning.drawPoints.add(new Node(x,y));
+            }
+            MapPanning.drawPoints.add(new Node(0,y));
+        }*/
     }
-
 }
