@@ -28,7 +28,7 @@ public class MainActivity extends AppCompatActivity  {
         userSearch.setSubmitButtonEnabled(false);
         userSearch.setQueryHint("Type a room...");
         userSearch.setIconifiedByDefault(false);
-//        userSearchClass.registerSearchListeners(userSearch, suggestion, getApplicationContext());
+        userSearchClass.registerSearchListeners(userSearch, suggestion, getApplicationContext());
         MapPanning mp = findViewById(R.id.im_move_zoom_rotate);
         /*for(int x = 0; x < 125; x++)
         {
