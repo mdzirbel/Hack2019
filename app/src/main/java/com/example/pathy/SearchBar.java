@@ -4,6 +4,7 @@ package com.example.pathy;
 import android.app.ListActivity;
 import android.content.Context;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.ScrollView;
 import android.widget.SearchView;
@@ -59,9 +60,9 @@ public class SearchBar {
         List<String> suggested = new ArrayList<String>();
         for (int i = 0; i < SUGGESTLIST.length; i++) {
             if (text.compareToIgnoreCase(SUGGESTLIST[i].substring(0, length)) == 0) {
-                TextView textView = new TextView(context);
-                textView.setText(SUGGESTLIST[i]);
-                suggestion.addView(textView);
+                Button button = new Button(context);
+                button.setText(SUGGESTLIST[i]);
+                suggestion.addView(button);
             }
         }
 
