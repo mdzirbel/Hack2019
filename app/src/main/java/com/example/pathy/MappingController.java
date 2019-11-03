@@ -143,6 +143,10 @@ public class MappingController{
         return new LinkedList<>(roomToEntryNodes.keySet());
     }
 
+    public static Node getNode(int x, int y){
+        return map.getNode(x,y);
+    }
+
     /**
      * internal function to set up the metadata hashmap
      * @param metaStream input stream of the metadata file
