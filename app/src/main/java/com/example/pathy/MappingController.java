@@ -18,8 +18,9 @@ import java.util.Map;
 
 public class MappingController{
     
-    private static MapV2 map;
+    private static MapV2 map = null;
     private static Map<String, String> metadata;
+    private static boolean hasInit = false;
     private static final String BLDG = "union";
 
     /**
@@ -33,6 +34,7 @@ public class MappingController{
             if (mapStream != null && dataStream != null) {
                 getMetadata(dataStream);
                 loadmap(mapStream);
+                hasInit = true;
             }
         }
         catch (FileNotFoundException e) {
@@ -42,8 +44,10 @@ public class MappingController{
     }
 
     public static void close(){
+        if(!hasInit) throw new RuntimeException("Attempted to close a non-initialized map");
         map.close();
         metadata.clear();
+        hasInit = false;
     }
 
     /**
@@ -53,6 +57,7 @@ public class MappingController{
      * @return lis of nodes to get from start to end including start and end
      */
     public static List<Node> getPathBetween(Node start, Node end){
+        if(!hasInit) throw new RuntimeException("Attempted to close a non-initialized map");
         return map.getPathBetween(start, end, 0);
     }
 
@@ -60,6 +65,7 @@ public class MappingController{
      * @returns the name of the map from the metadata file
      */
     public static String getMapName(){
+        if(!hasInit) throw new RuntimeException("Attempted to close a non-initialized map");
         return getSafeMeta("name");
     }
 
