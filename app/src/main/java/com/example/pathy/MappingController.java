@@ -120,6 +120,9 @@ public class MappingController{
         x = x * 0.7871 / 0.00001;
         y = y * 1.1132 / 0.00001;
 
+        x = Math.max(0, Math.min(x, 124));
+        y = Math.max(0, Math.min(y, 114));
+
         return new Node((int) Math.round(x), (int) Math.round(y));
     }
 

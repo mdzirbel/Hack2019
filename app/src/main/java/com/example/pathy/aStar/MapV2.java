@@ -1,5 +1,7 @@
 package com.example.pathy.aStar;
 
+import android.util.Log;
+
 import java.io.*;
 import java.util.Collections;
 import java.util.LinkedList;
@@ -37,7 +39,8 @@ public class MapV2 {
 
         Scanner scanner = new Scanner(this.reader);
         loadedNodes = new Node[region.y_size][region.x_size];
-        //System.out.println("created array");
+        Log.d("ASTAR", "Map array created");
+        Log.d("ASTAR", "Loading region " + region.debug());
         for(int r = 0; r < region.y_off + region.y_size; r++){
             //System.out.println("row " + r);
             if(r <  region.y_off){
@@ -54,7 +57,7 @@ public class MapV2 {
         }
         scanner.close();
         loadedRegion = region;
-        //System.out.println("loaded " + region);
+        Log.d("ASTAR","loaded " + region);
     }
 
     /**
@@ -65,11 +68,11 @@ public class MapV2 {
      * @return Node object at the coordinate pair specified
      */
     public Node getNode(int x, int y){
-        if(x > loadedRegion.x_off && x < loadedRegion.x_off + loadedRegion.x_size &&
-                y > loadedRegion.y_off && y < loadedRegion.y_off + loadedRegion.y_size)
+        if(x >= loadedRegion.x_off && x < loadedRegion.x_off + loadedRegion.x_size &&
+                y >= loadedRegion.y_off && y < loadedRegion.y_off + loadedRegion.y_size)
                     return loadedNodes[y - loadedRegion.y_off][x - loadedRegion.x_off];
 
-        throw new ArrayIndexOutOfBoundsException("outside current loaded region");
+        throw new ArrayIndexOutOfBoundsException(x + " " + y + " is outside current loaded region");
     }
 
     public void close(){
