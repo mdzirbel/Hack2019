@@ -81,7 +81,7 @@ public class MappingController{
             }
         });
 
-        return solutions.get(0);
+        return map.optimizePath(solutions.get(0));
     }
 
     /**
