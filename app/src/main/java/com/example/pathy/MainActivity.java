@@ -16,10 +16,6 @@ public class MainActivity extends AppCompatActivity  {
     public SearchBar userSearchClass;
     public LinearLayout suggestion;
 
-
-
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -27,7 +23,7 @@ public class MainActivity extends AppCompatActivity  {
         Networking.startDownloadTask(getApplicationContext(), "union");
         userSearch = findViewById(R.id.search);
         suggestion = findViewById(R.id.linearLayout);
-        userSearch.setSubmitButtonEnabled(true);
+        userSearch.setSubmitButtonEnabled(false);
         userSearch.setQueryHint("Type a room...");
         userSearch.setIconifiedByDefault(false);
         userSearchClass.registerSearchListeners(userSearch, suggestion, getApplicationContext());
