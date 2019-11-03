@@ -38,7 +38,7 @@ public class SearchBar {
                 Log.d("QUERY SUBMIT", "Input: " + query);
                 suggestion.getLayoutParams().height = 0;
                 suggestion.removeAllViews();
-                submitQuery(query);
+                submitQuery(query, con);
                 return false;
             }
 
