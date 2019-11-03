@@ -68,8 +68,8 @@ public class MapV2 {
      * @return Node object at the coordinate pair specified
      */
     public Node getNode(int x, int y){
-        if(x > loadedRegion.x_off && x < loadedRegion.x_off + loadedRegion.x_size &&
-                y > loadedRegion.y_off && y < loadedRegion.y_off + loadedRegion.y_size)
+        if(x >= loadedRegion.x_off && x < loadedRegion.x_off + loadedRegion.x_size &&
+                y >= loadedRegion.y_off && y < loadedRegion.y_off + loadedRegion.y_size)
                     return loadedNodes[y - loadedRegion.y_off][x - loadedRegion.x_off];
 
         throw new ArrayIndexOutOfBoundsException(x + " " + y + " is outside current loaded region");
