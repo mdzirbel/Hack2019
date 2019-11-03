@@ -14,7 +14,7 @@ import com.example.pathy.aStar.Node;
 
 public class LocationCoords implements LocationListener {
 
-    Node currentNode; // The node you're currently at
+    Node currentNode = new Node(40, 51); // The node you're currently at
 
     public LocationCoords(Context context, MainActivity that) {
 

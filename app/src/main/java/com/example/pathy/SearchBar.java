@@ -107,7 +107,9 @@ public class SearchBar {
             Log.e("SUBMIT QUERY", "Passed null pointer");
         }
         else {
-            MapPanning.drawPoints = (LinkedList) MappingController.getPathBetween(MainActivity.location.currentNode, query);
+            Log.d("SUBMIT QUERY", "Current node " + MainActivity.location.currentNode);
+            Log.d("SUBMIT QUERY", "nearest valid " + MappingController.snapNearestNode(MainActivity.location.currentNode));
+            MapPanning.drawPoints = MappingController.getPathBetween(MappingController.snapNearestNode(MainActivity.location.currentNode), query);
         }
     }
 

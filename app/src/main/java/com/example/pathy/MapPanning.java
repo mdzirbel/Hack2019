@@ -13,6 +13,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 import com.example.pathy.aStar.Node;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class MapPanning extends AppCompatImageView {
 
@@ -29,6 +30,8 @@ public class MapPanning extends AppCompatImageView {
 
     private ScaleGestureDetector mScaleDetector;
     private float mScaleFactor = 1.f;
+
+    static List<Node> drawPoints = new LinkedList<>();
 
     public MapPanning(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
@@ -137,7 +140,7 @@ public class MapPanning extends AppCompatImageView {
 
         return true;
     }
-    static LinkedList<Node> drawPoints = new LinkedList<>();
+
     @Override
     public void onDraw(Canvas canvas) {
 
@@ -164,8 +167,8 @@ public class MapPanning extends AppCompatImageView {
             int nodeY = drawPoints.get(i).getPos_y();
             int normalizeX = (int)((nodeX+0.0)/125*getWidth());
             int normalizeY = (int)((nodeY+0.0)/115*realHeight+imgOff);
-            paint.setColor(Color.argb(0, drawPoints.get(i).canTraverse() ? 0 : 255, drawPoints.get(i).canTraverse() ? 255 : 0, 0));
-            canvas.drawCircle(normalizeX, normalizeY, 10, paint);
+            paint.setColor(Color.argb(127, 255, 0, 0));
+            canvas.drawCircle(normalizeX, normalizeY, 5, paint);
         }
         /*for(int i = 0; i < drawPoints.size()-1; i++) {
             int nodeX1 = drawPoints.get(i).getPos_x();
