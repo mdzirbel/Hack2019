@@ -13,6 +13,7 @@ import androidx.appcompat.widget.AppCompatImageView;
 import com.example.pathy.aStar.Node;
 
 import java.util.LinkedList;
+import java.util.List;
 
 public class MapPanning extends AppCompatImageView {
 
@@ -29,6 +30,8 @@ public class MapPanning extends AppCompatImageView {
 
     private ScaleGestureDetector mScaleDetector;
     private float mScaleFactor = 1.f;
+
+    static List<Node> drawPoints = new LinkedList<>();
 
     public MapPanning(Context context, AttributeSet attrs) {
         this(context, attrs, 0);
@@ -137,7 +140,7 @@ public class MapPanning extends AppCompatImageView {
 
         return true;
     }
-    static LinkedList<Node> drawPoints = new LinkedList<>();
+
     static int[] youAreHere = new int[]{0,0};
     @Override
     public void onDraw(Canvas canvas) {

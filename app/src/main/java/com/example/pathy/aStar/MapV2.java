@@ -4,6 +4,7 @@ import android.util.Log;
 
 import java.io.*;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Scanner;
@@ -80,6 +81,15 @@ public class MapV2 {
         System.gc();
     }
 
+    public void reset(){
+        //System.out.println("setting goal");
+        for(Node[] nodes : loadedNodes){
+            for(Node node : nodes){
+                node.reset();
+            }
+        }
+    }
+
     public LinkedList<Node> adjacentTo(Node node){
         LinkedList<Node> toReturn = new LinkedList<>();
         //left
@@ -113,6 +123,40 @@ public class MapV2 {
         return toReturn;
     }
 
+    /**
+     * get the list of adjacent nodes regardless of traversal status
+     * @param node the node to look around
+     * @return a list of adjacent nodes
+     */
+    public LinkedList<Node> allAdjacentTo(Node node){
+        LinkedList<Node> toReturn = new LinkedList<>();
+        //left
+        if(node.getPos_x() - 1 > loadedRegion.x_off &&
+                !loadedNodes[node.getPos_y() - loadedRegion.y_off][node.getPos_x() - 1 - loadedRegion.x_off].getSearched()){
+            loadedNodes[node.getPos_y() - loadedRegion.y_off][node.getPos_x() - 1 - loadedRegion.x_off].setCameFrom(node);
+            toReturn.add(loadedNodes[node.getPos_y() - loadedRegion.y_off][node.getPos_x() - 1 - loadedRegion.x_off]);
+        }
+        //right
+        if(node.getPos_x() + 1 < loadedRegion.x_off + loadedRegion.x_size &&
+                !loadedNodes[node.getPos_y() - loadedRegion.y_off][node.getPos_x() + 1 - loadedRegion.x_off].getSearched()) {
+            loadedNodes[node.getPos_y() - loadedRegion.y_off][node.getPos_x() + 1 - loadedRegion.x_off].setCameFrom(node);
+            toReturn.add(loadedNodes[node.getPos_y() - loadedRegion.y_off][node.getPos_x() + 1 - loadedRegion.x_off]);
+        }
+        //above
+        if(node.getPos_y() - 1 > loadedRegion.y_off &&
+                !loadedNodes[node.getPos_y() - 1 - loadedRegion.y_off][node.getPos_x() - loadedRegion.x_off].getSearched()) {
+            loadedNodes[node.getPos_y() - 1 - loadedRegion.y_off][node.getPos_x() - loadedRegion.x_off].setCameFrom(node);
+            toReturn.add(loadedNodes[node.getPos_y() - 1 - loadedRegion.y_off][node.getPos_x() - loadedRegion.x_off]);
+        }
+        //below
+        if(node.getPos_y() + 1 < loadedRegion.y_off + loadedRegion.y_size &&
+                !loadedNodes[node.getPos_y() + 1 - loadedRegion.y_off][node.getPos_x() - loadedRegion.x_off].getSearched()) {
+            loadedNodes[node.getPos_y() + 1 - loadedRegion.y_off][node.getPos_x() - loadedRegion.x_off].setCameFrom(node);
+            toReturn.add(loadedNodes[node.getPos_y() + 1 - loadedRegion.y_off][node.getPos_x() - loadedRegion.x_off]);
+        }
+        return toReturn;
+    }
+
 
 
     /**
@@ -122,8 +166,9 @@ public class MapV2 {
      * @return a list of nodes representing the path
      */
     public LinkedList<Node> getPathBetween(Node start, Node end){
-        Log.d("ASTAR", start.debug() + " " + end.debug());
+        Log.d("ASTAR", start.toString() + " " + end.toString());
         //make sure we have the loaded node version of the start and end nodes
+        reset();
         start = getNode(start.pos_x, start.pos_y);
         end = getNode(end.pos_x, end.pos_y);
         setGoal(end); //set new goal node
@@ -142,6 +187,29 @@ public class MapV2 {
         //System.out.println("iteration complete");
         return reconsruct(end, start);
 
+    }
+
+    public Node snapNearest(final Node current){
+        LinkedList<Node> toVisit = new LinkedList<>();
+        reset();
+        toVisit.add(getNode(current.pos_x, current.pos_y));
+        Node working;
+        while (!toVisit.isEmpty()){
+            working = toVisit.poll();
+            //Log.d("ASTAR", "Visiting " + working.toString());
+            toVisit.addAll(allAdjacentTo(working));
+            Collections.sort(toVisit, new Comparator<Node>() {
+                @Override
+                public int compare(Node o1, Node o2) {
+                    return Node.distanceTo(current, o1) - Node.distanceTo(current, o2);
+                }
+            });
+            if(working.canTraverse()){
+                Log.d("ASTAR", "found traversable node " + working);
+                return working;
+            }
+        }
+        return null;
     }
 
     public List<Node> optimizePath(List<Node> unoptimizedPath){
@@ -167,33 +235,6 @@ public class MapV2 {
                 node.setGoal(goal);
             }
         }
-    }
-
-    private MapRegion getEncapRegion(Node one, Node two, int buff){
-        //load region around the two nodess with a set buffer size (probably 10 by 10)
-        int xoff, yoff, xsize, ysize;
-        //one is less than two on x
-        if(one.pos_x < two.pos_x) {
-            xoff = one.pos_x - buff;
-            xsize = two.pos_x - xoff + buff;
-        }
-        else {
-            xoff = two.pos_x - buff;
-            xsize = one.pos_x - xoff + buff;
-        }
-        xoff = (xoff < 0)? 0 : xoff;
-
-        if(one.pos_y < two.pos_y){
-            yoff = one.pos_y - buff;
-            ysize = two.pos_y - yoff + buff;
-        }
-        else {
-            yoff = two.pos_y - buff;
-            ysize = one.pos_y - yoff + buff;
-        }
-        yoff = (yoff < 0)? 0 : yoff;
-
-        return new MapRegion(xoff,yoff,xsize,ysize);
     }
 
     private LinkedList<Node> reconsruct(Node end, Node start){
