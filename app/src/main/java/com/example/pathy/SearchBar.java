@@ -59,14 +59,14 @@ public class SearchBar {
         suggestion.removeAllViews();
         int length = text.length();
         List<String> suggested = new ArrayList<String>();
+        suggestion.getLayoutParams().height = 0;
 
-        //userSearch.setOnTouchListener();
 
         if (text.length() == 0) {
-            userSearch.clearFocus();
-            //suggestion
+            suggestion.getLayoutParams().height = 0;
             suggestion.removeAllViews();
         } else {
+            suggestion.getLayoutParams().height = 600;
             for (int i = 0; i < SUGGESTLIST.length; i++) {
                 if (text.compareToIgnoreCase(SUGGESTLIST[i].substring(0, length)) == 0) {
                     Button button = new Button(context);
