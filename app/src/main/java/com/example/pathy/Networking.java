@@ -88,7 +88,7 @@ public class Networking {
                 {
                     for(int y = 0; y < 115; y++)
                     {
-                        MapPanning.drawPoints.add();
+                        MapPanning.drawPoints.add(MappingController.getNode(x, y));
                     }
                 }
             } catch (IOException e) {

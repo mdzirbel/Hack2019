@@ -158,12 +158,13 @@ public class MapPanning extends AppCompatImageView {
         paint.setStrokeWidth(5);
         int imgOff = 235;
         int realHeight = getHeight()-imgOff*2;
+        Log.d("MMFDebug", drawPoints.size()+"");
         for(int i = 0; i < drawPoints.size(); i++) {
             int nodeX = drawPoints.get(i).getPos_x();
             int nodeY = drawPoints.get(i).getPos_y();
             int normalizeX = (int)((nodeX+0.0)/125*getWidth());
             int normalizeY = (int)((nodeY+0.0)/115*realHeight+imgOff);
-            paint.setColor(Color.argb(255, drawPoints.get(i).canTraverse() ? 0 : 255, drawPoints.get(i).canTraverse() ? 255 : 0, 0));
+            paint.setColor(Color.argb(0, drawPoints.get(i).canTraverse() ? 0 : 255, drawPoints.get(i).canTraverse() ? 255 : 0, 0));
             canvas.drawCircle(normalizeX, normalizeY, 10, paint);
         }
         /*for(int i = 0; i < drawPoints.size()-1; i++) {
